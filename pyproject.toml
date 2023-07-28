@@ -34,7 +34,8 @@ dev = [
     "nbsphinx", # Used to integrate Python notebooks into Sphinx documentation
     "ipython", # Also used in building notebooks into Sphinx
     "matplotlib", # Used in sample notebook intro_notebook.ipynb
-    "numpy", # Used in sample notebook intro_notebook.ipynb
+    "numpy", # Used in sample notebook intro_notebook.ipynb,
+    "asv", # Used to compute and plot benchmarks
 ]
 
 [build-system]
