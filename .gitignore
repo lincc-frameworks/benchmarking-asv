@@ -138,3 +138,7 @@ dask-worker-space/
 
 # tmp directory
 tmp/
+
+# Airspeed velocity output
+benchmarks/html
+benchmarks/results

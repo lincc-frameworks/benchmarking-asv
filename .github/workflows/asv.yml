@@ -1,0 +1,36 @@
+# This workflow will install Python dependencies, run benchmarks with airspeed velocity (asv)
+# and publish the results to a dashboard on GH Pages.
+
+name: Run benchmarks with airspeed velocity
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.8', '3.9', '3.10']
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        python -m pip install --upgrade pip
+        pip install .
+        pip install .[dev]
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    - name: Change to benchmarks directory
+      run: cd benchmarks/
+    - name: Run benchmarks with asv
+      run: asv run
+    - name: Publish results to GH-pages
+      run: asv gh-pages
