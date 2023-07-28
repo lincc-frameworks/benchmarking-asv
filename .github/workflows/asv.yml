@@ -18,13 +18,18 @@ env:
 
 jobs:
 
-  install-dependencies:
+  run-asv:
     runs-on: ubuntu-latest
     steps:
       - name: Set up Python 3.10
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip
       - name: Install asv and virtualenv
         run: |
           sudo apt-get update
@@ -38,28 +43,33 @@ jobs:
       - name: Run ASV for current branch
         run: asv run --config $ASV_CONFIG_FILE -v
 
-  asv-run-main:
+  publish-gh-pages:
     if: ${{ github.event_name == 'push' }}
     runs-on: ubuntu-latest
-    needs: install-dependencies
-    # TODO: Load dependencies from prev. job
+    needs: run-asv
     steps:
-      - name: Generate HTML
+      - name: Restore dependencies cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip
+      - name: Generate dashboard HTML
         run: asv publish --config $ASV_CONFIG_FILE -v
-      - name: Deploy 🚀
+      - name: Deploy to Github pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: $GENERATED_HTML_DIR
 
-  asv-pull-request:
+  comment-pr:
     if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
-    needs: install-dependencies
-    # TODO: Load dependencies from prev. job
+    needs: run-asv
     steps:
+      - name: Restore dependencies cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip
       - name: Run comparison against main branch
         run: asv compare --config $ASV_CONFIG_FILE -v main HEAD
-      - name: Publish comment to PR
-        run: |
-          echo "Publishing performance comparison comment..."
       
