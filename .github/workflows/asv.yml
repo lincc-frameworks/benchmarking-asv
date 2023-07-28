@@ -9,12 +9,16 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions:
+  contents: write
+
 env:
-  ASV_CONFIG: benchmarks/asv.conf.json
+  ASV_CONFIG_FILE: benchmarks/asv.conf.json
+  GENERATED_HTML_DIR: benchmarks/html
 
 jobs:
 
-  run-asv:
+  install-dependencies:
     runs-on: ubuntu-latest
     steps:
       - name: Set up Python 3.10
@@ -29,22 +33,31 @@ jobs:
           pip install virtualenv
       - name: Checkout project repository
         uses: actions/checkout@v3
-      - name: Config git identity
-        run: |
-          git config user.email "scampos@andrew.cmu.edu"
-          git config user.name "Sandro Campos"
       - name: Create ASV machine config file
-        run: asv machine --config $ASV_CONFIG --yes -v
-      - name: Run benchmarks with asv
-        run: asv run --config $ASV_CONFIG -v
-      - name: Run asv for PR and publish comment with comparison
-        if: ${{ github.event_name == 'pull_request' }}
-        run: |
-          echo "Running for Pull Request"
-      - name: Run asv for main and publish results
-        if: ${{ github.event_name == 'push' }}
-        run: |
-          asv run --config $ASV_CONFIG -v
-          asv publish --config $ASV_CONFIG -v
-          asv gh-pages --config $ASV_CONFIG -v
+        run: asv machine --config $ASV_CONFIG_FILE --yes -v
+      - name: Run ASV for current branch
+        run: asv run --config $ASV_CONFIG_FILE -v
+
+asv-run-main:
+  if: ${{ github.event_name == 'push' }}
+  needs: install-dependencies
+  # TODO: Load dependencies from prev. job
+  steps:
+    - name: Generate HTML
+      run: asv publish --config $ASV_CONFIG_FILE -v
+    - name: Deploy 🚀
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        folder: $GENERATED_HTML_DIR
+
+asv-pull-request:
+  if: ${{ github.event_name == 'pull_request' }}
+  needs: install-dependencies
+  # TODO: Load dependencies from prev. job
+  steps:
+    - name: Run comparison against main branch
+      run: asv compare --config $ASV_CONFIG_FILE -v main HEAD
+    - name: Publish comment to PR
+      run: |
+        echo "Publishing performance comparison comment..."
       
