@@ -3,7 +3,7 @@ name = "benchmarking-asv"
 license = {file = "LICENSE"}
 readme = "README.md"
 authors = [
-    { name = "LINCC Frameworks", email = "scampos@andrew.cmu.edu" }
+    { name = "Sandro Campos", email = "scampos@andrew.cmu.edu" }
 ]
 classifiers = [
     "Development Status :: 4 - Beta",

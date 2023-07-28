@@ -1,8 +1,8 @@
-.. benchmarking-asv documentation main file.
+.. benchmarking_asv documentation main file.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to benchmarking-asv's documentation!
+Welcome to benchmarking_asv's documentation!
 ========================================================================================
 
 .. toctree::
