@@ -21,7 +21,7 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
-      - name: Install asv
+      - name: Install asv and virtualenv
         run: |
           sudo apt-get update
           python -m pip install --upgrade pip
@@ -29,6 +29,10 @@ jobs:
           pip install virtualenv
       - name: Checkout project repository
         uses: actions/checkout@v3
+      - name: Config git identity
+        run: |
+          git config user.email "scampos@andrew.cmu.edu"
+          git config user.name "Sandro Campos"
       - name: Create ASV machine config file
         run: asv machine --config $ASV_CONFIG --yes -v
       - name: Run benchmarks with asv
@@ -41,5 +45,6 @@ jobs:
         if: ${{ github.event_name == 'push' }}
         run: |
           asv run --config $ASV_CONFIG -v
+          asv publish --config $ASV_CONFIG -v
           asv gh-pages --config $ASV_CONFIG -v
       
