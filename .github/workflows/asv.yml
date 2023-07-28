@@ -38,26 +38,28 @@ jobs:
       - name: Run ASV for current branch
         run: asv run --config $ASV_CONFIG_FILE -v
 
-asv-run-main:
-  if: ${{ github.event_name == 'push' }}
-  needs: install-dependencies
-  # TODO: Load dependencies from prev. job
-  steps:
-    - name: Generate HTML
-      run: asv publish --config $ASV_CONFIG_FILE -v
-    - name: Deploy 🚀
-      uses: JamesIves/github-pages-deploy-action@v4
-      with:
-        folder: $GENERATED_HTML_DIR
+  asv-run-main:
+    if: ${{ github.event_name == 'push' }}
+    runs-on: ubuntu-latest
+    needs: install-dependencies
+    # TODO: Load dependencies from prev. job
+    steps:
+      - name: Generate HTML
+        run: asv publish --config $ASV_CONFIG_FILE -v
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: $GENERATED_HTML_DIR
 
-asv-pull-request:
-  if: ${{ github.event_name == 'pull_request' }}
-  needs: install-dependencies
-  # TODO: Load dependencies from prev. job
-  steps:
-    - name: Run comparison against main branch
-      run: asv compare --config $ASV_CONFIG_FILE -v main HEAD
-    - name: Publish comment to PR
-      run: |
-        echo "Publishing performance comparison comment..."
+  asv-pull-request:
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+    needs: install-dependencies
+    # TODO: Load dependencies from prev. job
+    steps:
+      - name: Run comparison against main branch
+        run: asv compare --config $ASV_CONFIG_FILE -v main HEAD
+      - name: Publish comment to PR
+        run: |
+          echo "Publishing performance comparison comment..."
       
