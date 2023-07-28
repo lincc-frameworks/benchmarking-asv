@@ -40,6 +40,9 @@ jobs:
       - name: Change to benchmarks directory
         run: cd benchmarks/
       - name: Run benchmarks with asv
-        run: asv run --config $ASV_CONFIG
+        run: |
+          pwd
+          ls
+          asv run --config $ASV_CONFIG -v
       - name: Publish results to GH-pages
-        run: asv gh-pages --config $ASV_CONFIG
+        run: asv gh-pages --config $ASV_CONFIG -v
