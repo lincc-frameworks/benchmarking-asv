@@ -8,29 +8,34 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
-
+  install-python:
     runs-on: ubuntu-latest
+
     strategy:
       matrix:
-        python-version: ['3.8', '3.9', '3.10']
+        python-version: [3.8, 3.9, 3.10]
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
-      run: |
-        sudo apt-get update
-        python -m pip install --upgrade pip
-        pip install .
-        pip install .[dev]
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-    - name: Change to benchmarks directory
-      run: cd benchmarks/
-    - name: Run benchmarks with asv
-      run: asv run
-    - name: Publish results to GH-pages
-      run: asv gh-pages
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+  run-asv:
+    needs: install-python
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          python -m pip install --upgrade pip
+          pip install .
+          pip install .[dev]
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      - name: Change to benchmarks directory
+        run: cd benchmarks/
+      - name: Run benchmarks with asv
+        run: asv run
+      - name: Publish results to GH-pages
+        run: asv gh-pages
