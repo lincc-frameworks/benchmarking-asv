@@ -8,7 +8,7 @@ on:
     branches: [ main ]
 
 env:
-  ASV_CONFIG: benchmarks/asv.config.json
+  ASV_CONFIG: benchmarks/asv.conf.json
 
 jobs:
   install-python:
@@ -37,12 +37,7 @@ jobs:
           pip install .
           pip install .[dev]
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-      - name: Change to benchmarks directory
-        run: cd benchmarks/
       - name: Run benchmarks with asv
-        run: |
-          pwd
-          ls
-          asv run --config $ASV_CONFIG -v
+        run: asv run --config $ASV_CONFIG -v
       - name: Publish results to GH-pages
         run: asv gh-pages --config $ASV_CONFIG -v
