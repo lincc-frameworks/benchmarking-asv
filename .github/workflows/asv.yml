@@ -30,7 +30,7 @@ jobs:
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip
-      - name: Install asv and virtualenv
+      - name: Install dependencies
         run: |
           sudo apt-get update
           python -m pip install --upgrade pip
@@ -53,6 +53,12 @@ jobs:
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          python -m pip install --upgrade pip
+          pip install asv
+          pip install virtualenv
       - name: Generate dashboard HTML
         run: asv publish --config $ASV_CONFIG_FILE -v
       - name: Deploy to Github pages
@@ -70,6 +76,12 @@ jobs:
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          python -m pip install --upgrade pip
+          pip install asv
+          pip install virtualenv
       - name: Run comparison against main branch
         run: asv compare --config $ASV_CONFIG_FILE main HEAD > results.txt
       - name: Publish comment to PR
