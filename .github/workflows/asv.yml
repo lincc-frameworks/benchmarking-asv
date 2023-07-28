@@ -13,8 +13,8 @@ permissions:
   contents: write
 
 env:
-  ASV_CONFIG_FILE: benchmarks/asv.conf.json
   GENERATED_HTML_DIR: benchmarks/html
+  ASV_FLAGS: "--config benchmarks/asv.conf.json -v"
 
 jobs:
 
@@ -34,20 +34,26 @@ jobs:
           pip install asv
           pip install virtualenv
       - name: Create ASV machine config file
-        run: asv machine --config $ASV_CONFIG_FILE --yes -v
-      - name: Run ASV for current branch
-        run: asv run --config $ASV_CONFIG_FILE -v
+        run: |
+          asv machine --yes $ASV_FLAGS
+      - name: Run ASV for the main branch
+        run: |
+          asv run $ASV_FLAGS
       - name: Generate dashboard HTML
         if: ${{ github.event_name == 'push' }}
-        run: asv publish --config $ASV_CONFIG_FILE -v
+        run: |
+          asv publish $ASV_FLAGS
       - name: Deploy to Github pages
         if: ${{ github.event_name == 'push' }}
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: ${{ env.GENERATED_HTML_DIR }}
-      - name: Run comparison against main branch
+      - name: Run comparison of PR against main branch
         if: ${{ github.event_name == 'pull_request' }}
-        run: asv compare --config $ASV_CONFIG_FILE main HEAD > results.txt
+        run: |
+          git checkout ${GITHUB_REF##*/}
+          asv run $ASV_FLAGS
+          asv compare main ${GITHUB_REF##*/} $ASV_FLAGS > results.txt
       - name: Publish comment to PR
         if: ${{ github.event_name == 'pull_request' }}
         uses: actions/github-script@v4
