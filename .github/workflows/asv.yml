@@ -7,6 +7,9 @@ on:
   push:
     branches: [ main ]
 
+env:
+  ASV_CONFIG: benchmarks/asv.config.json
+
 jobs:
   install-python:
     runs-on: ubuntu-latest
@@ -37,6 +40,6 @@ jobs:
       - name: Change to benchmarks directory
         run: cd benchmarks/
       - name: Run benchmarks with asv
-        run: asv run
+        run: asv run --config $ASV_CONFIG
       - name: Publish results to GH-pages
-        run: asv gh-pages
+        run: asv gh-pages --config $ASV_CONFIG
