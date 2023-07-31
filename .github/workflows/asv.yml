@@ -67,7 +67,7 @@ jobs:
         if: ${{ github.event_name == 'pull_request' }}
         run: |
           asv run $ASV_FLAGS
-          asv compare main $GITHUB_HEAD_REF $ASV_FLAGS > results.txt
+          asv compare main FETCH_HEAD $ASV_FLAGS > results.txt
 
       - name: Publish comment to PR
         if: ${{ github.event_name == 'pull_request' }}
