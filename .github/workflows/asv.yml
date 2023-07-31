@@ -15,7 +15,7 @@ permissions:
 
 env:
   GENERATED_HTML_DIR: benchmarks/html
-  ASV_FLAGS: "--config benchmarks/asv.conf.json -v"
+  ASV_FLAGS: "--config benchmarks/asv.conf.json"
 
 jobs:
 
