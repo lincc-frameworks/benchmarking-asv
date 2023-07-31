@@ -24,7 +24,6 @@ x          failed          1.01±0s      n/a  benchmarks.TimeSuite.time_xrange
 | Before      | After       | Ratio    | Method                             |
 |-------------|-------------|----------|------------------------------------|
 | [fcd6c976]  | [bc939276]  |          |                                    |
-| \<main\>    | \<test-pr\> |          |                                    |
 | failed      | 304±2ms     | n/a      | benchmarks.TimeSuite.time_iterkeys |
 | 2.43±0.05μs | 205±0.7ms   | 84400.48 | benchmarks.TimeSuite.time_keys     |
 | 9.67±0.03μs | 505±1ms     | 52177.14 | benchmarks.TimeSuite.time_range    |
@@ -51,7 +50,7 @@ def format_asv_table_from_file(filename):
     with open(filename, "r") as file:
         rows = parse_table_rows(file.readlines())
         headers = format_headers(rows[0])
-        branch_data = [format_branch_rows(row) for row in rows[1:3]]
+        branch_data = [rows[1]]
         table_data = extract_failed_benchmarks(rows[3:])
 
     return headers, branch_data + table_data
@@ -91,22 +90,6 @@ def format_headers(headers):
     return [header.capitalize() for header in headers]
 
 
-def format_branch_rows(row):
-    """Formats and escapes the rows containing branch information.
-
-    Parameters
-    ----------
-    rows : list of str
-        Rows containing branch information.
-
-    Returns
-    -------
-    list of lists
-
-    """
-    return [data.replace("<", "\<").replace(">", "\>") for data in row]
-
-
 def extract_failed_benchmarks(lines):
     """Extracts the rows containing failed benchmarks.
 
@@ -114,13 +97,13 @@ def extract_failed_benchmarks(lines):
 
     Parameters
     ----------
-    lines : list of str
-        File lines containing branch information.
+    lines : list of lists
+        Lines containing benchmark information.
 
     Returns
     -------
-    list of str
-        Lines containing failed benchmarks.
+    list of lists
+        Lines containing failed benchmark information.
     """
     rows = list(filter(lambda line: len(line) == 5, lines))
     return [row[1:] for row in rows]
@@ -129,6 +112,5 @@ def extract_failed_benchmarks(lines):
 if __name__ == "__main__":
     headers, rows = format_asv_table_from_file(output_file)
 
-    # Override table with "github" style
     with open(output_file, "w") as file:
         file.write(tabulate(rows, headers=headers, tablefmt=output_table_style))
