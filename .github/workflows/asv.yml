@@ -11,6 +11,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 env:
   GENERATED_HTML_DIR: benchmarks/html
@@ -83,4 +84,3 @@ jobs:
               body: comment,
             });
             console.log("Comment published:", data.html_url);
-      
