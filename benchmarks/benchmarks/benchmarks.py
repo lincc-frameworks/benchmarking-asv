@@ -1,3 +1,6 @@
+import time
+
+
 class TimeSuite:
     """
     An example benchmark that times the performance of various kinds
@@ -10,22 +13,16 @@ class TimeSuite:
             self.d[x] = None
 
     def time_keys(self):
-        for key in self.d.keys():
-            pass
+        time.sleep(0.2)
 
     def time_iterkeys(self):
-        for key in self.d.iterkeys():
-            pass
+        time.sleep(0.3)
 
     def time_range(self):
-        d = self.d
-        for key in range(500):
-            x = d[key]
+        time.sleep(0.5)
 
     def time_xrange(self):
-        d = self.d
-        for key in xrange(500):
-            x = d[key]
+        time.sleep(1)
 
 
 class MemSuite:

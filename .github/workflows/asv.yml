@@ -1,7 +1,7 @@
 # This workflow will install Python dependencies, run benchmarks with airspeed velocity (asv)
 # and publish the results to a dashboard on GH Pages.
 
-name: Run benchmarks with airspeed velocity
+name: Run benchmarks with ASV
 
 on:
   push:
@@ -11,55 +11,75 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 env:
-  ASV_CONFIG_FILE: benchmarks/asv.conf.json
   GENERATED_HTML_DIR: benchmarks/html
+  ASV_FLAGS: "--config benchmarks/asv.conf.json"
 
 jobs:
 
   run-asv:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout project repository
+
+      - name: Checkout main branch of the repository
         uses: actions/checkout@v3
+        with:
+          ref: main
+
       - name: Set up Python 3.10
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
+
       - name: Install dependencies
         run: |
           sudo apt-get update
           python -m pip install --upgrade pip
-          pip install asv
-          pip install virtualenv
+          pip install asv virtualenv tabulate
+
       - name: Create ASV machine config file
-        run: asv machine --config $ASV_CONFIG_FILE --yes -v
-      - name: Run ASV for current branch
-        run: asv run --config $ASV_CONFIG_FILE -v
+        run: asv machine --yes $ASV_FLAGS
+
+      - name: Run ASV for the main branch
+        run: asv run $ASV_FLAGS
+
       - name: Generate dashboard HTML
         if: ${{ github.event_name == 'push' }}
-        run: asv publish --config $ASV_CONFIG_FILE -v
+        run: asv publish $ASV_FLAGS
+
       - name: Deploy to Github pages
         if: ${{ github.event_name == 'push' }}
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: ${{ env.GENERATED_HTML_DIR }}
-      - name: Run comparison against main branch
+
+      - name: Checkout the PR branch
         if: ${{ github.event_name == 'pull_request' }}
-        run: asv compare --config $ASV_CONFIG_FILE main HEAD > results.txt
+        run: |
+          git fetch origin $GITHUB_REF
+          git checkout FETCH_HEAD
+  
+      - name: Run comparison of PR against main branch
+        if: ${{ github.event_name == 'pull_request' }}
+        run: |
+          asv run $ASV_FLAGS
+          asv compare main FETCH_HEAD $ASV_FLAGS > output
+          python benchmarks/format.py
+
       - name: Publish comment to PR
         if: ${{ github.event_name == 'pull_request' }}
-        uses: actions/github-script@v4
+        uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const fs = require('fs');
-            const comment = fs.readFileSync('results.txt', 'utf-8');
-            const { data } = await github.issues.createComment({
+            const comment = fs.readFileSync('output', 'utf-8');
+            const { data } = await github.rest.issues.createComment({
               ...context.repo,
               issue_number: context.issue.number,
               body: comment,
             });
             console.log("Comment published:", data.html_url);
-      
