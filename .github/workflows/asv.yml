@@ -57,9 +57,10 @@ jobs:
       - name: Checkout the PR branch
         if: ${{ github.event_name == 'pull_request' }}
         run: |
-          echo "Checking out to $GITHUB_HEAD_REF"
-          git checkout $GITHUB_HEAD_REF
-
+          echo "Checking out to $GITHUB_REF"
+          git fetch origin $GITHUB_REF
+          git checkout FETCH_HEAD
+  
       - name: Run comparison of PR against main branch
         if: ${{ github.event_name == 'pull_request' }}
         run: |
