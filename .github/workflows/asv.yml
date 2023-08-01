@@ -14,7 +14,6 @@ permissions:
   pull-requests: write
 
 env:
-  ASV_FLAGS: "--config benchmarks/asv.conf.json"
   ACTION_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
 jobs:
@@ -23,11 +22,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
-      - name: Checkout main branch of the repository
-        uses: actions/checkout@v3
-        with:
-          ref: main
 
       - name: Set up Python 3.10
         uses: actions/setup-python@v4
@@ -40,21 +34,29 @@ jobs:
           python -m pip install --upgrade pip
           pip install asv virtualenv tabulate
 
+      - name: Checkout main branch of the repository
+        uses: actions/checkout@v3
+        with:
+          ref: main
+
+      - name: Change to benchmarks
+        run: cd benchmarks
+
       - name: Create ASV machine config file
-        run: asv machine --yes $ASV_FLAGS
+        run: asv machine --yes
 
       - name: Run ASV for the main branch
-        run: asv run $ASV_FLAGS
+        run: asv run
 
       - name: Generate dashboard HTML
         if: ${{ github.event_name == 'push' }}
-        run: asv publish $ASV_FLAGS
+        run: asv publish
 
       - name: Deploy to Github pages
         if: ${{ github.event_name == 'push' }}
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: benchmarks/html
+          folder: html
 
       - name: Checkout the PR branch
         if: ${{ github.event_name == 'pull_request' }}
@@ -65,9 +67,9 @@ jobs:
       - name: Run comparison of PR against main branch
         if: ${{ github.event_name == 'pull_request' }}
         run: |
-          asv run $ASV_FLAGS
-          asv compare main FETCH_HEAD $ASV_FLAGS | tee output
-          python benchmarks/format.py
+          asv run
+          asv compare main FETCH_HEAD --sort ratio | tee output
+          python format.py
           echo "\nFull logs: $ACTION_URL" >> output
 
       - name: Publish comment to PR
