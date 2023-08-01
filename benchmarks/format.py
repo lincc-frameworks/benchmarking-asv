@@ -4,6 +4,7 @@ from tabulate import tabulate
 
 output_file = "output"
 output_table_style = "github"
+max_num_rows = 10
 
 
 """Typical ASV table file (before processing):
@@ -51,7 +52,9 @@ def format_asv_table_from_file(filename):
         rows = parse_table_rows(file.readlines())
         headers = format_headers(rows[0])
         branch_data = [rows[1]]
-        table_data = extract_failed_benchmarks(rows[3:])
+        bench_data = rows[3:]
+        num_results = min(max_num_rows, len(bench_data))
+        table_data = extract_benchmarks(bench_data[:num_results])
 
     return headers, branch_data + table_data
 
@@ -90,10 +93,8 @@ def format_headers(headers):
     return [header.capitalize() for header in headers]
 
 
-def extract_failed_benchmarks(lines):
-    """Extracts the rows containing failed benchmarks.
-
-    The first column (populated with the "x" symbol) is erased as it becomes irrelevant.
+def extract_benchmarks(lines):
+    """Extracts the rows containing benchmarks.
 
     Parameters
     ----------
