@@ -66,7 +66,7 @@ jobs:
         if: ${{ github.event_name == 'pull_request' }}
         run: |
           asv run $ASV_FLAGS
-          asv compare main FETCH_HEAD $ASV_FLAGS > output
+          asv compare main FETCH_HEAD --sort ratio $ASV_FLAGS > output
           python benchmarks/format.py
 
       - name: Publish comment to PR
