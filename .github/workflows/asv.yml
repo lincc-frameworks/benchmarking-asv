@@ -37,6 +37,8 @@ jobs:
           pip install asv virtualenv tabulate
 
   asv-main:
+    if: ${{ github.event_name == 'push' }}
+
     runs-on: ubuntu-latest
     needs: setup-dependencies
 
@@ -72,6 +74,8 @@ jobs:
           folder: html
 
   asv-pr:
+    if: ${{ github.event_name == 'pull_request' }}
+
     runs-on: ubuntu-latest
     needs: setup-dependencies
 
@@ -100,16 +104,19 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           job_name: ${{ github.job }}
 
+      - name: Create ASV machine config file
+        run: asv machine --yes
+
       - name: Run comparison of PR against main branch
         run: |
-          git remote add upstream ${{ github.repositoryUrl }}
+          git remote add upstream https://github.com/${{github.repository}}.git
           git fetch upstream
           asv continuous upstream/main HEAD
           asv compare upstream/main HEAD --sort ratio | tee output
           python format.py
           printf "\n\nClick [here]($STEP_URL) to view all benchmarks." >> output
         env:
-          STEP_URL: "${{ steps.jobs.outputs.html_url }}#step:6:1"
+          STEP_URL: "${{ steps.jobs.outputs.html_url }}#step:7:1"
 
       - name: Publish comment to PR
         uses: actions/github-script@v6
