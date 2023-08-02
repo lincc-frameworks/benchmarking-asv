@@ -12,7 +12,6 @@
     // List of branches to benchmark. If not provided, defaults to "master"
     // (for git) or "tip" (for mercurial).
     "branches": [
-        "HEAD",
         "main"
     ],
     "build_command": [
