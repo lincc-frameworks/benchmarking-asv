@@ -141,3 +141,6 @@ tmp/
 
 # Airspeed velocity output
 benchmarks/html
+
+# MacOS
+.DS_STORE

@@ -5,10 +5,10 @@
     // The name of the project being benchmarked
     "project": "benchmarking-asv",
     // The project's homepage
-    "project_url": "https://github.com/lincc-frameworks/benchmarking-asv.git",
+    "project_url": "https://github.com/lincc-frameworks/benchmarking-asv",
     // The URL or local path of the source code repository for the
     // project being benchmarked
-    "repo": "..",
+    "repo": "https://github.com/lincc-frameworks/benchmarking-asv.git",
     // List of branches to benchmark. If not provided, defaults to "master"
     // (for git) or "tip" (for mercurial).
     "branches": [
