@@ -4,6 +4,7 @@ from tabulate import tabulate
 
 output_file = "output"
 output_table_style = "github"
+max_num_rows = 10
 
 
 """Typical ASV table file (before processing):
@@ -13,11 +14,11 @@ All benchmarks:
        before           after         ratio
      [fcd6c976]       [bc939276]
      <main>           <test-pr> 
-             2.1k             2.1k     1.00  benchmarks.MemSuite.mem_list
-x          failed          304±2ms      n/a  benchmarks.TimeSuite.time_iterkeys
-x     2.43±0.05μs        205±0.7ms 84400.48  benchmarks.TimeSuite.time_keys
-x     9.67±0.03μs          505±1ms 52177.14  benchmarks.TimeSuite.time_range
-x          failed          1.01±0s      n/a  benchmarks.TimeSuite.time_xrange
+            2.1k             2.1k     1.00  benchmarks.MemSuite.mem_list
+          failed          304±2ms      n/a  benchmarks.TimeSuite.time_iterkeys
+     2.43±0.05μs        205±0.7ms 84400.48  benchmarks.TimeSuite.time_keys
+     9.67±0.03μs          505±1ms 52177.14  benchmarks.TimeSuite.time_range
+          failed          1.01±0s      n/a  benchmarks.TimeSuite.time_xrange
 """
 
 """Formatted ASV table file (github style):
@@ -51,7 +52,9 @@ def format_asv_table_from_file(filename):
         rows = parse_table_rows(file.readlines())
         headers = format_headers(rows[0])
         branch_data = [rows[1]]
-        table_data = extract_failed_benchmarks(rows[3:])
+        bench_data = rows[3:]
+        num_results = min(max_num_rows, len(bench_data))
+        table_data = extract_benchmarks(bench_data[:num_results])
 
     return headers, branch_data + table_data
 
@@ -90,10 +93,8 @@ def format_headers(headers):
     return [header.capitalize() for header in headers]
 
 
-def extract_failed_benchmarks(lines):
-    """Extracts the rows containing failed benchmarks.
-
-    The first column (populated with the "x" symbol) is erased as it becomes irrelevant.
+def extract_benchmarks(lines):
+    """Extracts the rows containing benchmarks.
 
     Parameters
     ----------
@@ -105,8 +106,7 @@ def extract_failed_benchmarks(lines):
     list of lists
         Lines containing failed benchmark information.
     """
-    rows = list(filter(lambda line: len(line) == 5, lines))
-    return [row[1:] for row in rows]
+    return list(filter(lambda line: len(line) == 4, lines))
 
 
 if __name__ == "__main__":

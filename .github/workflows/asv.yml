@@ -9,30 +9,49 @@ on:
   pull_request:
     branches: [ main ]
 
-permissions:
-  contents: write
-  pull-requests: write
-
 env:
-  GENERATED_HTML_DIR: benchmarks/html
-  ASV_FLAGS: "--config benchmarks/asv.conf.json"
+  PYTHON_VERSION: "3.10"
+  WORKING_DIR: ${{ github.workspace }}/benchmarks
 
 jobs:
 
-  run-asv:
+  setup-python:
     runs-on: ubuntu-latest
 
     steps:
-
-      - name: Checkout main branch of the repository
-        uses: actions/checkout@v3
+      - name: Cache Python ${{ env.PYTHON_VERSION }}
+        uses: actions/cache@v3
         with:
-          ref: main
+          path: ~/.cache/pip
+          key: python-${{ env.PYTHON_VERSION }}
 
-      - name: Set up Python 3.10
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: "${{ env.PYTHON_VERSION }}"
+
+  asv-main:
+    if: ${{ github.event_name == 'push' }}
+
+    runs-on: ubuntu-latest
+    needs: setup-python
+
+    permissions:
+      contents: write
+
+    defaults:
+      run:
+        working-directory: ${{ env.WORKING_DIR }}
+
+    steps:
+      - name: Checkout main branch of the repository
+        uses: actions/checkout@v3
+
+      - name: Cache Python ${{ env.PYTHON_VERSION }}
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: python-${{ env.PYTHON_VERSION }}
 
       - name: Install dependencies
         run: |
@@ -41,45 +60,90 @@ jobs:
           pip install asv virtualenv tabulate
 
       - name: Create ASV machine config file
-        run: asv machine --yes $ASV_FLAGS
+        run: asv machine --yes
 
       - name: Run ASV for the main branch
-        run: asv run $ASV_FLAGS
+        run: asv run
 
       - name: Generate dashboard HTML
-        if: ${{ github.event_name == 'push' }}
-        run: asv publish $ASV_FLAGS
+        run: asv publish
 
       - name: Deploy to Github pages
-        if: ${{ github.event_name == 'push' }}
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: ${{ env.GENERATED_HTML_DIR }}
+          folder: html
 
-      - name: Checkout the PR branch
-        if: ${{ github.event_name == 'pull_request' }}
+  asv-pr:
+    if: ${{ github.event_name == 'pull_request' }}
+
+    runs-on: ubuntu-latest
+    needs: setup-python
+
+    permissions:
+      actions: read
+      pull-requests: write
+
+    defaults:
+      run:
+        working-directory: ${{ env.WORKING_DIR }}
+
+    steps:
+      - name: Checkout PR branch of the repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Cache Python ${{ env.PYTHON_VERSION }}
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: python-${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
         run: |
-          git fetch origin $GITHUB_REF
-          git checkout FETCH_HEAD
-  
+          sudo apt-get update
+          python -m pip install --upgrade pip
+          pip install asv virtualenv tabulate
+
+      - name: Get current job logs URL
+        uses: Tiryoh/gha-jobid-action@v0
+        id: jobs
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          job_name: ${{ github.job }}
+
+      - name: Create ASV machine config file
+        run: asv machine --yes
+
       - name: Run comparison of PR against main branch
-        if: ${{ github.event_name == 'pull_request' }}
         run: |
-          asv run $ASV_FLAGS
-          asv compare main FETCH_HEAD $ASV_FLAGS > output
-          python benchmarks/format.py
+          git remote add upstream https://github.com/${{github.repository}}.git
+          git fetch upstream
+          asv continuous upstream/main HEAD
+          asv compare upstream/main HEAD --sort ratio | tee output
+          python format.py
+          printf "\n\nClick [here]($STEP_URL) to view all benchmarks." >> output
+        env:
+          STEP_URL: "${{ steps.jobs.outputs.html_url }}#step:8:1"
 
       - name: Publish comment to PR
-        if: ${{ github.event_name == 'pull_request' }}
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const fs = require('fs');
-            const comment = fs.readFileSync('output', 'utf-8');
-            const { data } = await github.rest.issues.createComment({
-              ...context.repo,
-              issue_number: context.issue.number,
-              body: comment,
-            });
-            console.log("Comment published:", data.html_url);
+            const path = require('path');
+
+            const workingDir = process.env.WORKING_DIR;
+            try {
+              process.chdir(workingDir);
+              const comment = fs.readFileSync('output', 'utf-8');
+              const { data } = await github.rest.issues.createComment({
+                ...context.repo,
+                issue_number: context.issue.number,
+                body: comment,
+              });
+              console.log('Comment published:', data.html_url);
+            } catch (err) {
+              console.error(err);
+            }
