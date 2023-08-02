@@ -1,6 +1,9 @@
 """An example module containing simplistic functions."""
 
 
+import time
+
+
 def greetings() -> str:
     """A friendly greeting for a future friend.
 
@@ -21,3 +24,7 @@ def meaning() -> int:
         The meaning of life.
     """
     return 42
+
+
+def mysleep():
+    time.sleep(1)

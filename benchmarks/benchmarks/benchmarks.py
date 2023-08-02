@@ -1,5 +1,7 @@
 import time
 
+import benchmarking_asv
+
 
 class TimeSuite:
     """
@@ -13,7 +15,8 @@ class TimeSuite:
             self.d[x] = None
 
     def time_keys(self):
-        time.sleep(1)
+        benchmarking_asv.example_module.mysleep()
+        print("hi")
 
     def time_iterkeys(self):
         time.sleep(0.25)
