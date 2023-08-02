@@ -15,7 +15,6 @@ permissions:
 
 env:
   WORKING_DIR: ${{ github.workspace }}/benchmarks
-  GITHUB_REPO: ${{ github.server_url }}/${{ github.repository }}
 
 jobs:
 
@@ -70,7 +69,9 @@ jobs:
           asv run
           asv compare main FETCH_HEAD --sort ratio | tee output
           python format.py
-          printf "\n\nFull logs: ${{ env.GITHUB_REPO }}/actions/runs/${{ github.run_id }}" >> output
+          printf "\n\nClick [here]($STEP_URL) to view all benchmarks." >> output
+        env:
+          STEP_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/jobs/${{ github.job }}#step:10:1
 
       - name: Publish comment to PR
         if: ${{ github.event_name == 'pull_request' }}
