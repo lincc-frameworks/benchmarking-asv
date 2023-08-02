@@ -13,16 +13,16 @@ class TimeSuite:
             self.d[x] = None
 
     def time_keys(self):
-        time.sleep(0.5)
+        time.sleep(1)
 
     def time_iterkeys(self):
-        time.sleep(0.01)
+        time.sleep(0.15)
 
     def time_range(self):
-        time.sleep(0.25)
+        time.sleep(0.1)
 
     def time_xrange(self):
-        time.sleep(1)
+        time.sleep(0.7)
 
 
 class MemSuite:
