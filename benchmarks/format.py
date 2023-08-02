@@ -106,8 +106,7 @@ def extract_benchmarks(lines):
     list of lists
         Lines containing failed benchmark information.
     """
-    rows = list(filter(lambda line: len(line) == 5, lines))
-    return [row[1:] for row in rows]
+    return list(filter(lambda line: len(line) == 4, lines))
 
 
 if __name__ == "__main__":
