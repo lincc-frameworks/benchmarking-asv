@@ -65,6 +65,14 @@ jobs:
       - name: Run ASV for the main branch
         run: asv run
 
+      - name: Submit results to the repository
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add results/
+          git commit -m "Add benchmarks"
+          git push origin main
+
       - name: Generate dashboard HTML
         run: asv publish
 
