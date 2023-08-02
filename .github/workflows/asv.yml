@@ -81,7 +81,7 @@ jobs:
           python format.py
           printf "\n\nClick [here]($STEP_URL) to view all benchmarks." >> output
         env:
-          STEP_URL: "${{ steps.jobs.outputs.html_url }}#step:11:1"
+          STEP_URL: "${{ steps.jobs.outputs.html_url }}#step:12:1"
 
       - name: Publish comment to PR
         if: ${{ github.event_name == 'pull_request' }}
