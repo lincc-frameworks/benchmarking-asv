@@ -70,7 +70,7 @@ jobs:
           asv run
           asv compare main FETCH_HEAD --sort ratio | tee output
           python format.py
-          echo "\n\nFull logs: ${{ env.GITHUB_REPO }}/actions/runs/${{ github.run_id }}" >> output
+          printf "\n\nFull logs: ${{ env.GITHUB_REPO }}/actions/runs/${{ github.run_id }}" >> output
 
       - name: Publish comment to PR
         if: ${{ github.event_name == 'pull_request' }}
