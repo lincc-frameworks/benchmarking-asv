@@ -71,7 +71,7 @@ jobs:
       - name: Deploy to Github pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: html
+          folder: ${{ env.WORKING_DIR }}/html
 
   asv-pr:
     if: ${{ github.event_name == 'pull_request' }}
