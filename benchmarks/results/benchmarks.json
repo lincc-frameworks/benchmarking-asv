@@ -1,13 +1,13 @@
 {
     "benchmarks.MemSuite.mem_list": {
-        "code": "class MemSuite:\n    def mem_list(self):\n        bench.example_module.run_mem_computation()",
+        "code": "class MemSuite:\n    def mem_list(self):\n        return bench.example_module.run_mem_computation()",
         "name": "benchmarks.MemSuite.mem_list",
         "param_names": [],
         "params": [],
         "timeout": 60.0,
         "type": "memory",
         "unit": "bytes",
-        "version": "fb6963cd414236bf417b0c06e89c4bd501671d027baf9df247d9b5b06cadbe5f"
+        "version": "1e6d6124b3320c2e93916f9ec1416c80e4c1533127d61997a1eae4d40e716fce"
     },
     "benchmarks.TimeSuite.time_iterkeys": {
         "code": "class TimeSuite:\n    def time_iterkeys(self):\n        bench.example_module.run_time_computation()\n\n    def setup(self):\n        self.d = {}\n        for x in range(500):\n            self.d[x] = None",
