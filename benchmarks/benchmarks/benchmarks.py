@@ -26,4 +26,4 @@ class TimeSuite:
 
 class MemSuite:
     def mem_list(self):
-        bench.example_module.run_mem_computation()
+        return bench.example_module.run_mem_computation()
