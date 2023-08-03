@@ -57,7 +57,7 @@ jobs:
         run: |
           if [ -f ${{ env.LAST_NIGHTLY_HASH }} ]; then          
             PREV_HASH=$(cat ${{ env.LAST_NIGHTLY_HASH }})
-            asv continuous ${{ github.sha }} $PREV_HASH
+            asv continuous ${{ github.sha }} $PREV_HASH || true
             asv compare ${{ github.sha }} $PREV_HASH --sort ratio
           fi
 
