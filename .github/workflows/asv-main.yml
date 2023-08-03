@@ -50,6 +50,8 @@ jobs:
     steps:
       - name: Checkout main branch of the repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Cache Python ${{ env.PYTHON_VERSION }}
         uses: actions/cache@v3
