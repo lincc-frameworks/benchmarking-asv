@@ -1,13 +1,10 @@
-import time
-
-import benchmarking_asv
+import benchmarking_asv as bench
 
 
 class TimeSuite:
-    """
-    An example benchmark that times the performance of various kinds
-    of iterating over dictionaries in Python.
-    """
+
+    """An example benchmark that times the performance of various kinds
+    of iterating over dictionaries in Python."""
 
     def setup(self):
         self.d = {}
@@ -15,19 +12,18 @@ class TimeSuite:
             self.d[x] = None
 
     def time_keys(self):
-        benchmarking_asv.example_module.mysleep()
-        print("hi")
+        bench.example_module.run_time_computation()
 
     def time_iterkeys(self):
-        time.sleep(0.25)
+        bench.example_module.run_time_computation()
 
     def time_range(self):
-        time.sleep(0.08)
+        bench.example_module.run_time_computation()
 
     def time_xrange(self):
-        time.sleep(0.5)
+        bench.example_module.run_time_computation()
 
 
 class MemSuite:
     def mem_list(self):
-        return [0] * 255
+        bench.example_module.run_mem_computation()

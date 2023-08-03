@@ -1,6 +1,7 @@
 """An example module containing simplistic functions."""
 
 
+import random
 import time
 
 
@@ -26,5 +27,9 @@ def meaning() -> int:
     return 42
 
 
-def mysleep():
-    time.sleep(1)
+def run_time_computation():
+    time.sleep(random.uniform(0, 3))
+
+
+def run_mem_computation():
+    return [0] * random.randint(255, 1024)
