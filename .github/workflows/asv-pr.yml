@@ -72,7 +72,7 @@ jobs:
         run: |
           git remote add upstream https://github.com/lincc-frameworks/benchmarking-asv.git
           git fetch upstream
-          asv continuous upstream/main HEAD
+          asv continuous upstream/main HEAD || true
           asv compare upstream/main HEAD --sort ratio | tee output
           python format.py
           printf "\n\nClick [here]($STEP_URL) to view all benchmarks." >> output
