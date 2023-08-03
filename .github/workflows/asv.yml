@@ -136,7 +136,7 @@ jobs:
 
       - name: Run comparison of PR against main branch
         run: |
-          git remote add upstream https://github.com/${{github.repository}}.git
+          git remote add upstream https://github.com/${{ github.repository }}.git
           git fetch upstream
           asv continuous upstream/main HEAD
           asv compare upstream/main HEAD --sort ratio | tee output

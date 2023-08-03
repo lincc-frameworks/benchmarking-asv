@@ -1,0 +1,63 @@
+# This workflow will run every 5 min. 
+# It will install Python dependencies and run benchmarks.
+
+name: Run benchmarks nightly job
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+
+env:
+  PYTHON_VERSION: "3.10"
+  WORKING_DIR: ${{ github.workspace }}/benchmarks
+  LAST_COMMIT_HASH_FILE: nightly-last-commit-hash
+
+jobs:
+
+  asv-nightly:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ${{ env.WORKING_DIR }}
+
+    steps:
+      - name: Cache Python ${{ env.PYTHON_VERSION }}
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: python-${{ env.PYTHON_VERSION }}
+
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: "${{ env.PYTHON_VERSION }}"
+
+      - name: Checkout main branch of the repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          python -m pip install --upgrade pip
+          pip install asv virtualenv
+
+      - name: Create ASV machine config file
+        run: asv machine --machine gh-runner --yes
+
+      - name: Cache last nightly build commit hash
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.WORKING_DIR }}
+          key: ${{ env.LAST_COMMIT_HASH_FILE }}
+
+      - name: Run comparison of main against last nightly build
+        run: |
+          if [ -f ${{ env.LAST_COMMIT_HASH_FILE }} ]; then
+            git remote add upstream https://github.com/${{ github.repository }}.git
+            git fetch upstream
+            asv compare upstream/main "$(cat nightly-last-commit-hash)" --sort ratio
+          fi
+          echo "${{ github.sha }}" > nightly-last-commit-hash
