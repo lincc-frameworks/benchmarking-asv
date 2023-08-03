@@ -55,12 +55,9 @@ jobs:
 
       - name: Run comparison of main against last nightly build
         run: |
-          if [ -f ${{ env.LAST_NIGHTLY_HASH }} ]; then
-            git remote add upstream https://github.com/${{ github.repository }}.git
-            git fetch upstream
-          
+          if [ -f ${{ env.LAST_NIGHTLY_HASH }} ]; then          
             PREV_HASH=$(cat ${{ env.LAST_NIGHTLY_HASH }})
-            asv continuous upstream/main $PREV_HASH
+            asv continuous ${{ github.sha }} $PREV_HASH
             asv compare ${{ github.sha }} $PREV_HASH --sort ratio
           fi
 
