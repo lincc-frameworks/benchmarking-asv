@@ -1,11 +1,11 @@
-# This workflow will run every 5 min. 
+# This workflow will run daily at 06:45.
 # It will install Python dependencies and run benchmarks.
 
 name: Run benchmarks nightly job
 
 on:
-  push:
-    branches: [ main ]
+  schedule:
+    - cron: 45 6 * * *
   
 env:
   PYTHON_VERSION: "3.10"
