@@ -70,10 +70,8 @@ jobs:
 
       - name: Run comparison of PR against main branch
         run: |
-          git remote add upstream https://github.com/${{github.repository}}.git
-          git fetch upstream
-          asv continuous upstream/main HEAD
-          asv compare upstream/main HEAD --sort ratio | tee output
+          asv continuous main HEAD
+          asv compare main HEAD --sort ratio | tee output
           python format.py
           printf "\n\nClick [here]($STEP_URL) to view all benchmarks." >> output
         env:
