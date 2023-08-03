@@ -11,14 +11,14 @@ max_num_rows = 10
     
 All benchmarks:
 
-       before           after         ratio
-     [fcd6c976]       [bc939276]
-     <main>           <test-pr> 
-            2.1k             2.1k     1.00  benchmarks.MemSuite.mem_list
-          failed          304±2ms      n/a  benchmarks.TimeSuite.time_iterkeys
-     2.43±0.05μs        205±0.7ms 84400.48  benchmarks.TimeSuite.time_keys
-     9.67±0.03μs          505±1ms 52177.14  benchmarks.TimeSuite.time_range
-          failed          1.01±0s      n/a  benchmarks.TimeSuite.time_xrange
+        before           after        ratio
+      [fcd6c976]       [bc939276]
+      <main>           <test-pr> 
+             2.1k             2.1k     1.00  benchmarks.MemSuite.mem_list
+           failed          304±2ms      n/a  benchmarks.TimeSuite.time_iterkeys
+      2.43±0.05μs        205±0.7ms 84400.48  benchmarks.TimeSuite.time_keys
+-     9.67±0.03μs          505±1ms 52177.14  benchmarks.TimeSuite.time_range
+           failed          1.01±0s      n/a  benchmarks.TimeSuite.time_xrange
 """
 
 """Formatted ASV table file (github style):
@@ -52,9 +52,9 @@ def format_asv_table_from_file(filename):
         rows = parse_table_rows(file.readlines())
         headers = format_headers(rows[0])
         branch_data = [rows[1]]
-        bench_data = rows[3:]
+        bench_data = rows[2:]
         num_results = min(max_num_rows, len(bench_data))
-        table_data = extract_benchmarks(bench_data[:num_results])
+        table_data = remove_first_column(bench_data[:num_results])
 
     return headers, branch_data + table_data
 
@@ -93,8 +93,9 @@ def format_headers(headers):
     return [header.capitalize() for header in headers]
 
 
-def extract_benchmarks(lines):
-    """Extracts the rows containing benchmarks.
+def remove_first_column(lines):
+    """Discards the first column of the benchmarks table if it
+    does not contain useful information ("+" / "-" / "x").
 
     Parameters
     ----------
@@ -104,9 +105,9 @@ def extract_benchmarks(lines):
     Returns
     -------
     list of lists
-        Lines containing failed benchmark information.
+        Lines containing benchmark information.
     """
-    return list(filter(lambda line: len(line) == 4, lines))
+    return [line[1:] if len(line) > 4 else line for line in lines]
 
 
 if __name__ == "__main__":
