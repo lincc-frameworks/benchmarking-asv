@@ -28,8 +28,8 @@ def meaning() -> int:
 
 
 def run_time_computation():
-    time.sleep(random.uniform(0, 3))
+    time.sleep(random.uniform(0, 2))
 
 
 def run_mem_computation():
-    return [0] * random.randint(255, 2048)
+    return [0] * random.randint(255, 1024)
