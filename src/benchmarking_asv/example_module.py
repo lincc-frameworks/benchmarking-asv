@@ -28,7 +28,7 @@ def meaning() -> int:
 
 
 def run_time_computation():
-    time.sleep(random.uniform(0, 5))
+    time.sleep(random.uniform(0, 3))
 
 
 def run_mem_computation():
