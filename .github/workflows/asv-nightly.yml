@@ -4,13 +4,13 @@
 name: Run benchmarks nightly job
 
 on:
-  schedule:
-    - cron: '*/5 * * * *'
-
+  push:
+    branches: [ main ]
+  
 env:
   PYTHON_VERSION: "3.10"
   WORKING_DIR: ${{ github.workspace }}/benchmarks
-  LAST_COMMIT_HASH_FILE: nightly-last-commit-hash
+  LAST_NIGHTLY_HASH: last-nightly-hash
 
 jobs:
 
@@ -47,17 +47,20 @@ jobs:
       - name: Create ASV machine config file
         run: asv machine --machine gh-runner --yes
 
-      - name: Cache last nightly build commit hash
+      - name: Cache results (with last nightly commit hash)
         uses: actions/cache@v3
         with:
           path: ${{ env.WORKING_DIR }}
-          key: ${{ env.LAST_COMMIT_HASH_FILE }}
+          key: "last-nightly-results"
 
       - name: Run comparison of main against last nightly build
         run: |
-          if [ -f ${{ env.LAST_COMMIT_HASH_FILE }} ]; then
+          if [ -f ${{ env.LAST_NIGHTLY_HASH }} ]; then
             git remote add upstream https://github.com/${{ github.repository }}.git
             git fetch upstream
-            asv compare upstream/main "$(cat nightly-last-commit-hash)" --sort ratio
+            PREV_HASH=$(cat ${{ env.LAST_NIGHTLY_HASH }})
+            asv compare ${{ github.sha }} $PREV_HASH --sort ratio
           fi
-          echo "${{ github.sha }}" > nightly-last-commit-hash
+
+      - name: Update nightly commit hash
+        run: echo ${{ github.sha }} > ${{ env.LAST_NIGHTLY_HASH }}
