@@ -1,4 +1,4 @@
-# This workflow will install Python dependencies, run benchmarks with airspeed velocity (asv)
+# This workflow will run benchmarks with airspeed velocity (asv)
 # and publish the results to a dashboard on GH Pages.
 
 name: Run ASV benchmarks for main
@@ -15,10 +15,12 @@ jobs:
 
   consecutiveness:
     runs-on: ubuntu-latest
+
     steps:
-    - uses: mktcode/consecutive-workflow-action@eb43c6b5852dd0e33efa797a1817196d06daa4b2
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set workflows on main to run consecutively
+        uses: mktcode/consecutive-workflow-action@eb43c6b5852dd0e33efa797a1817196d06daa4b2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
   setup-python:
     runs-on: ubuntu-latest
@@ -77,7 +79,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add results/
           git pull
-          git commit -m "Add benchmarks"
+          git commit -m "Upload new benchmarks"
           git push origin main
 
       - name: Generate dashboard HTML
