@@ -1,5 +1,6 @@
 # This workflow will run daily at 06:45.
-# It will install Python dependencies and run benchmarks.
+# It will run benchmarks with airspeed velocity (asv)
+# and compare performance with the previous nightly build.
 
 name: Run benchmarks nightly job
 
@@ -66,9 +67,7 @@ jobs:
             asv continuous $PREV_HASH ${{ github.sha }}  || true
             asv compare $PREV_HASH ${{ github.sha }} --sort ratio
           fi
-
-      - name: Update nightly commit hash
-        run: echo ${{ github.sha }} > ${{ env.NIGHTLY_HASH_FILE }}
+          echo ${{ github.sha }} > ${{ env.NIGHTLY_HASH_FILE }}
 
       - name: Update last nightly hash in cache
         uses: actions/cache@v3

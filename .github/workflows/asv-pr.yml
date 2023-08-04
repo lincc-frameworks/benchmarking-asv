@@ -1,5 +1,6 @@
-# This workflow will install Python dependencies, run benchmarks with airspeed velocity (asv)
-# and publish the results to a dashboard on GH Pages.
+# This workflow will run benchmarks with airspeed velocity (asv) for pull requests.
+# It will compare the performance of the main branch with the performance of the merge
+# with the new changes and publish a comment with this assessment.  
 
 name: Run ASV benchmarks for PR
 
