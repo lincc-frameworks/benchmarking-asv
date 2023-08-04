@@ -3,9 +3,11 @@
 
 name: Run ASV benchmarks for main
 
+# on:
+#   push:
+#     branches: [ main ]
 on:
-  push:
-    branches: [ main ]
+  workflow_dispatch:
 
 env:
   PYTHON_VERSION: "3.10"
