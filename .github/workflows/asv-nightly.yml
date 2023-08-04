@@ -53,14 +53,14 @@ jobs:
       - name: Get nightly dates under comparison
         id: nightly-dates
         run: |
-          echo "::set-output name=yesterday::$(date -d yesterday +'%Y-%m-%d')"
           echo "::set-output name=today::$(date +'%Y-%m-%d')"
+          echo "::set-output name=tomorrow::$(date -v+1d +%Y-%m-%d)"
 
       - name: Use last nightly commit hash from cache
         uses: actions/cache@v3
         with:
           path: ${{ env.WORKING_DIR }}
-          key: nightly-results-${{ steps.nightly-dates.outputs.yesterday }}
+          key: nightly-results-${{ steps.nightly-dates.outputs.today }}
 
       - name: Run comparison of main against last nightly build
         run: |
@@ -77,4 +77,4 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ${{ env.WORKING_DIR }}
-          key: nightly-results-${{ steps.nightly-dates.outputs.today }}
+          key: nightly-results-${{ steps.nightly-dates.outputs.tomorrow }}
