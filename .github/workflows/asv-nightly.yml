@@ -4,13 +4,9 @@
 
 name: Run benchmarks nightly job
 
-# on:
-#   schedule:
-#     - cron: 45 6 * * *
-
 on:
-  push:
-    branches: [ main ]
+  schedule:
+    - cron: 45 6 * * *
 
 env:
   PYTHON_VERSION: "3.10"
