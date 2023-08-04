@@ -53,8 +53,8 @@ jobs:
       - name: Get nightly dates under comparison
         id: nightly-dates
         run: |
-          echo "::set-output name=today::$(date +'%Y-%m-%d')"
-          echo "::set-output name=tomorrow::$(date -v+1d +%Y-%m-%d)"
+          echo "today=2023-08-04" >> $GITHUB_OUTPUT
+          echo "tomorrow=2023-08-05" >> $GITHUB_OUTPUT
 
       - name: Use last nightly commit hash from cache
         uses: actions/cache@v3
