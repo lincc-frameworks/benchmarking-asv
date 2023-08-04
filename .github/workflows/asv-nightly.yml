@@ -6,10 +6,11 @@ name: Run benchmarks nightly job
 # on:
 #   schedule:
 #     - cron: 45 6 * * *
+
 on:
   push:
     branches: [ main ]
-
+    
 env:
   PYTHON_VERSION: "3.10"
   WORKING_DIR: ${{ github.workspace }}/benchmarks
@@ -53,21 +54,21 @@ jobs:
       - name: Get nightly dates under comparison
         id: nightly-dates
         run: |
-          echo "today=2023-08-04" >> $GITHUB_OUTPUT
-          echo "tomorrow=2023-08-05" >> $GITHUB_OUTPUT
+          echo "yesterday=2023-08-05" >> $GITHUB_OUTPUT
+          echo "today=2023-08-06" >> $GITHUB_OUTPUT
 
       - name: Use last nightly commit hash from cache
         uses: actions/cache@v3
         with:
           path: ${{ env.WORKING_DIR }}
-          key: nightly-results-${{ steps.nightly-dates.outputs.today }}
+          key: nightly-results-${{ steps.nightly-dates.outputs.yesterday }}
 
       - name: Run comparison of main against last nightly build
         run: |
           if [ -f ${{ env.NIGHTLY_HASH_FILE}} ]; then          
             PREV_HASH=$(cat ${{ env.NIGHTLY_HASH_FILE }})
-            asv continuous ${{ github.sha }} $PREV_HASH || true
-            asv compare ${{ github.sha }} $PREV_HASH --sort ratio
+            asv continuous $PREV_HASH ${{ github.sha }}  || true
+            asv compare $PREV_HASH ${{ github.sha }} --sort ratio
           fi
 
       - name: Update nightly commit hash
@@ -77,4 +78,4 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ${{ env.WORKING_DIR }}
-          key: nightly-results-${{ steps.nightly-dates.outputs.tomorrow }}
+          key: nightly-results-${{ steps.nightly-dates.outputs.today }}
