@@ -3,14 +3,17 @@
 
 name: Run benchmarks nightly job
 
+# on:
+#   schedule:
+#     - cron: 45 6 * * *
 on:
-  schedule:
-    - cron: 45 6 * * *
-  
+  push:
+    branches: [ main ]
+
 env:
   PYTHON_VERSION: "3.10"
   WORKING_DIR: ${{ github.workspace }}/benchmarks
-  LAST_NIGHTLY_HASH: last-nightly-hash
+  NIGHTLY_HASH_FILE: nightly-hash
 
 jobs:
 
@@ -47,19 +50,31 @@ jobs:
       - name: Create ASV machine config file
         run: asv machine --machine gh-runner --yes
 
-      - name: Cache results (with last nightly commit hash)
+      - name: Get nightly dates under comparison
+        id: nightly-dates
+        run: |
+          echo "::set-output name=yesterday::$(date -d yesterday +'%Y-%m-%d')"
+          echo "::set-output name=today::$(date +'%Y-%m-%d')"
+
+      - name: Use last nightly commit hash from cache
         uses: actions/cache@v3
         with:
           path: ${{ env.WORKING_DIR }}
-          key: "last-nightly-results"
+          key: nightly-results-${{ steps.nightly-dates.outputs.yesterday }}
 
       - name: Run comparison of main against last nightly build
         run: |
-          if [ -f ${{ env.LAST_NIGHTLY_HASH }} ]; then          
-            PREV_HASH=$(cat ${{ env.LAST_NIGHTLY_HASH }})
+          if [ -f ${{ env.NIGHTLY_HASH_FILE}} ]; then          
+            PREV_HASH=$(cat ${{ env.NIGHTLY_HASH_FILE }})
             asv continuous ${{ github.sha }} $PREV_HASH || true
             asv compare ${{ github.sha }} $PREV_HASH --sort ratio
           fi
 
       - name: Update nightly commit hash
-        run: echo ${{ github.sha }} > ${{ env.LAST_NIGHTLY_HASH }}
+        run: echo ${{ github.sha }} > ${{ env.NIGHTLY_HASH_FILE }}
+
+      - name: Update last nightly hash in cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.WORKING_DIR }}
+          key: nightly-results-${{ steps.nightly-dates.outputs.today }}
