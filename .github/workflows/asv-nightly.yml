@@ -3,14 +3,10 @@
 
 name: Run benchmarks nightly job
 
-# on:
-#   schedule:
-#     - cron: 45 6 * * *
-
 on:
-  push:
-    branches: [ main ]
-    
+  schedule:
+    - cron: 45 6 * * *
+
 env:
   PYTHON_VERSION: "3.10"
   WORKING_DIR: ${{ github.workspace }}/benchmarks
@@ -54,8 +50,8 @@ jobs:
       - name: Get nightly dates under comparison
         id: nightly-dates
         run: |
-          echo "yesterday=2023-08-05" >> $GITHUB_OUTPUT
-          echo "today=2023-08-06" >> $GITHUB_OUTPUT
+          echo "yesterday=$(date -d yesterday +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+          echo "today=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
 
       - name: Use last nightly commit hash from cache
         uses: actions/cache@v3
