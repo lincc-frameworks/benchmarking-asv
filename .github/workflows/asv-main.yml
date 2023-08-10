@@ -71,7 +71,7 @@ jobs:
         run: asv machine --machine gh-runner --yes
 
       - name: Run ASV for the main branch
-        run: asv run ALL --skip-existing --steps 2
+        run: asv run ALL --skip-existing
 
       - name: Submit results to the repository
         run: |
