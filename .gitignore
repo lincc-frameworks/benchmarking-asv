@@ -144,3 +144,7 @@ benchmarks/html
 
 # MacOS
 .DS_STORE
+
+# Airspeed Velocity performance results
+_results/
+_html/
