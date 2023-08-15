@@ -85,7 +85,7 @@ jobs:
         run: asv machine --machine gh-runner --yes
 
       - name: Run ASV for the main branch
-        run: asv run ALL --skip-existing
+        run: asv run ALL --skip-existing --steps 3
 
       - name: Submit new results to the "benchmarks" branch 
         uses: JamesIves/github-pages-deploy-action@v4
