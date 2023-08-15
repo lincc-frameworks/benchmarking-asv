@@ -76,6 +76,8 @@ jobs:
         run: |
           if git ls-remote --exit-code origin benchmarks > /dev/null 2>&1; then
             git merge origin/benchmarks --allow-unrelated-histories
+            ls ${{ github.workspace }}
+            ls ${{ env.WORKING_DIR }}
             mv ../_results .
           fi
         
@@ -83,7 +85,10 @@ jobs:
         run: asv machine --machine gh-runner --yes
 
       - name: Run ASV for the main branch
-        run: asv run ALL --skip-existing
+        run: |
+          ls
+          ls _results
+          asv run ALL --skip-existing
 
       - name: Submit new results to the "benchmarks" branch 
         uses: JamesIves/github-pages-deploy-action@v4
