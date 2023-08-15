@@ -74,22 +74,22 @@ jobs:
 
       - name: Fetch results from "benchmarks" branch
         run: |
-          git merge origin/benchmarks --allow-unrelated-histories
-          mv _results ${{ env.WORKING_DIR }}
-
+          if git ls-remote --exit-code origin benchmarks > /dev/null 2>&1; then
+            git merge origin/benchmarks --allow-unrelated-histories
+            mv ../_results .
+          fi
+        
       - name: Create ASV machine config file
         run: asv machine --machine gh-runner --yes
 
       - name: Run ASV for the main branch
         run: asv run ALL --skip-existing
 
-      - name: Submit new results to the "benchmarks" branch
-        run: |
-          mv _results ..
-          git checkout benchmarks
-          git add _results -f
-          git commit -m "Upload new benchmarks"
-          git push origin benchmarks
+      - name: Submit new results to the "benchmarks" branch 
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: benchmarks
+          folder: ${{ env.WORKING_DIR }}/_results
 
       - name: Generate dashboard HTML
         run: |
@@ -99,4 +99,5 @@ jobs:
       - name: Deploy to Github pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
+          branch: gh-pages
           folder: ${{ env.WORKING_DIR }}/_html
