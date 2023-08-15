@@ -74,7 +74,7 @@ jobs:
 
       - name: Fetch results from "benchmarks" branch
         run: |
-          git merge benchmarks
+          git merge origin/benchmarks
           mv _results ${{ env.WORKING_DIR }}
 
       - name: Create ASV machine config file
