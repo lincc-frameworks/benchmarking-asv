@@ -72,6 +72,9 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
+      - name: Create ASV machine config file
+        run: asv machine --machine gh-runner --yes
+
       - name: Fetch results from "benchmarks" branch
         run: |
           if git ls-remote --exit-code origin benchmarks > /dev/null 2>&1; then
@@ -80,12 +83,9 @@ jobs:
               --no-commit
             mv ../_results .
           fi
-        
-      - name: Create ASV machine config file
-        run: asv machine --machine gh-runner --yes
 
       - name: Run ASV for the main branch
-        run: asv run ALL --skip-existing --steps 3
+        run: asv run ALL --skip-existing
 
       - name: Submit new results to the "benchmarks" branch 
         uses: JamesIves/github-pages-deploy-action@v4
