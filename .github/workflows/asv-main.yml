@@ -67,6 +67,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install asv virtualenv tabulate
 
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
       - name: Fetch results from "benchmarks" branch
         run: |
           if git ls-remote --exit-code origin benchmarks > /dev/null 2>&1; then
@@ -87,6 +92,7 @@ jobs:
         with:
           branch: benchmarks
           folder: ${{ env.WORKING_DIR }}/_results
+          target-folder: _results
 
       - name: Generate dashboard HTML
         run: |
