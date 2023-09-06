@@ -28,8 +28,10 @@ def meaning() -> int:
 
 
 def run_time_computation():
+    """Mock function for random time computation."""
     time.sleep(random.uniform(0, 5))
 
 
 def run_mem_computation():
+    """Mock function for random mem consumption."""
     return [0] * random.randint(0, 512)
