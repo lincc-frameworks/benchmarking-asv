@@ -7,6 +7,13 @@ on:
 
 jobs:
   pre-commit-ci:
+    env: 
+      SKIP: >
+        "check-lincc-frameworks-template-version, 
+        pytest-check, 
+        no-commit-to-branch, 
+        check-added-large-files, 
+        sphinx-build"
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3

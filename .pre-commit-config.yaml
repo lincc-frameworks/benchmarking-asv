@@ -1,12 +1,3 @@
-ci:
-  skip: [
-    check-lincc-frameworks-template-version, 
-    pytest-check, 
-    no-commit-to-branch, 
-    check-added-large-files, 
-    sphinx-build
-  ]
-
 repos:
 
     # Compare the local template version to the latest remote template version
