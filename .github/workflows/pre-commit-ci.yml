@@ -1,21 +1,15 @@
-# This workflow runs pre-commit hooks to promote code style consistency.
+# This workflow runs pre-commit hooks to enforce code style.
 
 name: Run pre-commit hooks
 
 on:
   pull_request:
 
-env: 
-  SKIP: |
-    "check-lincc-frameworks-template-version," \
-    "pytest-check," \
-    "no-commit-to-branch," \
-    "check-added-large-files," \
-    "sphinx-build"
-
 jobs:
   pre-commit-ci:
     runs-on: ubuntu-latest
+    env: 
+      SKIP: "check-lincc-frameworks-template-version,pytest-check,no-commit-to-branch,check-added-large-files,sphinx-build"
     steps:
     - uses: actions/checkout@v3
       with:
