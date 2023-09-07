@@ -22,7 +22,7 @@ jobs:
       run: |
         sudo apt-get update
         python -m pip install --upgrade pip
-        pip install pylint
+        pip install pylint jupyter
     - uses: pre-commit/action@v3.0.0
       with:
         extra_args: --from-ref ${{ github.event.pull_request.base.sha }} --to-ref ${{ github.event.pull_request.head.sha }}
