@@ -1,9 +1,11 @@
 # This workflow runs pre-commit hooks to enforce code style.
+# It is triggered on pull requests to main.
 
 name: Run pre-commit hooks
 
 on:
   pull_request:
+    branches: [ main ]
 
 jobs:
   pre-commit-ci:
