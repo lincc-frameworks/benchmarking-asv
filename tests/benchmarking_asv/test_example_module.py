@@ -1,9 +1,5 @@
 """An example module containing testing of mock functions."""
 
-import random
-
-import numpy as np
-
 from benchmarking_asv import example_module
 
 
@@ -14,5 +10,6 @@ def test_greetings() -> None:
 
 
 def test_meaning() -> None:
+    """Verify the output of the `meaning` function"""
     output = example_module.meaning()
     assert output == 42
