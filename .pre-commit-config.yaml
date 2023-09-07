@@ -62,9 +62,9 @@ repos:
     rev: 23.7.0
     hooks:
       - id: black-jupyter
-        name: Run black (python files in src/ and tests/)
+        name: Run black (.py and .ipnyb files)
         description: Auto-format code with black.
-        files: ^(src|tests)/
+        files: ^(src|tests|docs|benchmarks)/
         language_version: python3.10
 
     # Automatically sort the imports used in .py files
@@ -72,10 +72,19 @@ repos:
     rev: 5.12.0
     hooks:
       - id: isort
-        name: Run isort (python files in src/ and tests/)
+        name: Run isort (python files)
         description: Sort and organize imports in .py files.
         types: [python]
-        files: ^(src|tests)/
+        files: ^(src|tests|benchmarks)/
+
+    # Automatically sort the imports used in .ipynb files
+  - repo: https://github.com/nbQA-dev/nbQA
+    rev: 1.7.0
+    hooks:
+      - id: nbqa-isort
+        name: Run isort (jupyter notebooks)
+        files: ^docs/
+        args: ["--float-to-top"]
 
     # Analyze the src code style and report code that doesn't adhere.
   - repo: local
