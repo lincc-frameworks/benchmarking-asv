@@ -62,9 +62,9 @@ repos:
     rev: 23.7.0
     hooks:
       - id: black-jupyter
-        name: Run black
+        name: Run black (python files in src/ and tests/)
         description: Auto-format code with black.
-        exclude: ^(src|tests|docs|benchmarks)/
+        files: ^(src|tests)/
         language_version: python3.10
 
     # Automatically sort the imports used in .py files
@@ -72,7 +72,7 @@ repos:
     rev: 5.12.0
     hooks:
       - id: isort
-        name: isort (python files in src/ and tests/)
+        name: Run isort (python files in src/ and tests/)
         description: Sort and organize imports in .py files.
         types: [python]
         files: ^(src|tests)/
