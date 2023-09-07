@@ -37,7 +37,7 @@ repos:
         pass_filenames: false
         always_run: true
 
-    # prevents committing directly branches named 'main' and 'master'.
+    # Prevents committing directly branches named 'main' and 'master'.
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.4.0
     hooks:
@@ -49,13 +49,20 @@ repos:
         description: Prevent the user from committing very large files.
         args: ['--maxkb=500']
 
-    # verify that pyproject.toml is well formed
+    # Verify that pyproject.toml is well formed
   - repo: https://github.com/abravalheri/validate-pyproject
     rev: v0.12.1
     hooks:
       - id: validate-pyproject
         name: Validate pyproject.toml
         description: Verify that pyproject.toml adheres to the established schema.
+
+    # Run black to format code
+  - repo: https://github.com/psf/black
+    rev: 23.7.0
+    hooks:
+      - id: black-jupyter
+        language_version: python3.10
 
     # Automatically sort the imports used in .py files
   - repo: https://github.com/pycqa/isort
@@ -66,7 +73,6 @@ repos:
         description: Sort and organize imports in .py files.
         types: [python]
         files: ^(src|tests)/
-
 
     # Analyze the src code style and report code that doesn't adhere.
   - repo: local
@@ -83,6 +89,7 @@ repos:
             "-sn", # Don't display the score
             "--rcfile=src/.pylintrc",
           ]
+
     # Analyze the tests code style and report code that doesn't adhere.
   - repo: local
     hooks:
@@ -98,7 +105,6 @@ repos:
             "-sn", # Don't display the score
             "--rcfile=tests/.pylintrc",
           ]
-
 
     # Make sure Sphinx can build the documentation while explicitly omitting 
     # notebooks from the docs, so users don't have to wait through the execution 
