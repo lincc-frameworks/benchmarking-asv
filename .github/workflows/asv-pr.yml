@@ -4,11 +4,13 @@
 
 name: Run ASV benchmarks for PR
 
-# Run after pre-commit hooks is completed
 on:
-  workflow_run:
-    workflows: [Run pre-commit hooks]
-    types: [completed]
+  pull_request:
+    branches: [ main ]
+
+concurrency:
+  group: ${{ github.head_ref }}
+  cancel-in-progress: true
 
 env:
   PYTHON_VERSION: "3.10"
