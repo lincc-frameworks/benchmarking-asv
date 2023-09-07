@@ -1,6 +1,7 @@
-import benchmarking_asv as bench
-import time
 import random
+import time
+
+import benchmarking_asv as bench
 
 
 class TimeSuite:
