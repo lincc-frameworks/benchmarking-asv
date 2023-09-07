@@ -23,7 +23,7 @@ def meaning() -> int:
     int
         The meaning of life.
     """
-    return 42
+    return    42
 
 
 def run_time_computation():
@@ -32,5 +32,4 @@ def run_time_computation():
 
 
 def run_mem_computation():
-    """Mock function for random mem consumption."""
     return [0] * random.randint(0, 512)
