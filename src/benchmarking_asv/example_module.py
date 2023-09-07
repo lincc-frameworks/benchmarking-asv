@@ -23,7 +23,7 @@ def meaning() -> int:
     int
         The meaning of life.
     """
-    return    42
+    return 42
 
 
 def run_time_computation():
