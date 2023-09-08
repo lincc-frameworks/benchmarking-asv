@@ -1,5 +1,6 @@
-import random
 import time
+import random
+
 
 import benchmarking_asv as bench
 
@@ -25,4 +26,4 @@ class TimeSuite:
 
 class MemSuite:
     def mem_list(self):
-        return bench.example_module.run_mem_computation()
+        return bench.example_module.run_mem_computation(. )

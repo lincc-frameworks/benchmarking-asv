@@ -62,7 +62,7 @@ repos:
     rev: 23.7.0
     hooks:
       - id: black-jupyter
-        files: ^(src|tests|docs|benchmarks)/
+        types_or: [python, pyi, jupyter]
         language_version: python3.10
 
     # Automatically sort the imports used in .py files
@@ -70,10 +70,8 @@ repos:
     rev: 5.12.0
     hooks:
       - id: isort
-        name: Run isort (python files)
-        description: Sort and organize imports in .py files.
-        types: [python]
-        files: ^(src|tests|benchmarks)/
+        name: Run isort
+        types_or: [python, pyi]
 
     # Analyze the src code style and report code that doesn't adhere.
   - repo: local
