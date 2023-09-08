@@ -1,6 +1,5 @@
-import time
 import random
-
+import time
 
 import benchmarking_asv as bench
 
