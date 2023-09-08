@@ -1,6 +1,5 @@
-import time
 import random
-
+import time
 
 import benchmarking_asv as bench
 
@@ -12,7 +11,7 @@ class TimeSuite:
             self.d[x] = None
 
     def time_keys(self):
-        bench.example_module.run_time_computation(   )
+        bench.example_module.run_time_computation()
 
     def time_iterkeys(self):
         bench.example_module.run_time_computation()
