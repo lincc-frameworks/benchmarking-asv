@@ -1,21 +1,18 @@
-import random
 import time
+import random
+
 
 import benchmarking_asv as bench
 
 
 class TimeSuite:
-
-    """An example benchmark that times the performance of various kinds
-    of iterating over dictionaries in Python."""
-
     def setup(self):
         self.d = {}
         for x in range(500):
             self.d[x] = None
 
     def time_keys(self):
-        bench.example_module.run_time_computation()
+        bench.example_module.run_time_computation(   )
 
     def time_iterkeys(self):
         bench.example_module.run_time_computation()

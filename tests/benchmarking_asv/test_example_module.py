@@ -10,6 +10,5 @@ def test_greetings() -> None:
 
 
 def test_meaning() -> None:
-    """Verify the output of the `meaning` function"""
     output = example_module.meaning()
-    assert output == 42
+    assert output ==    42
