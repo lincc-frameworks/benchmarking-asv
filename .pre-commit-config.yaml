@@ -1,3 +1,4 @@
+fail_fast: true
 repos:
 
     # Compare the local template version to the latest remote template version
@@ -23,7 +24,7 @@ repos:
         entry: jupyter nbconvert --clear-output
 
     # Run unit tests, verify that they pass. Note that coverage is run against
-    # the ./src directory here because that is what will be committed. In the 
+    # the ./src directory here because that is what will be committed. In the
     # github workflow script, the coverage is run against the installed package
     # and uploaded to Codecov by calling pytest like so:
     # `python -m pytest --cov=<package_name> --cov-report=xml`
@@ -57,34 +58,17 @@ repos:
         name: Validate pyproject.toml
         description: Verify that pyproject.toml adheres to the established schema.
 
-    # Run black to format code
-  - repo: https://github.com/psf/black
-    rev: 23.7.0
-    hooks:
-      - id: black-jupyter
-        name: Run black (.py and .ipnyb files)
-        description: Auto-format code with black.
-        files: ^(src|tests|docs|benchmarks)/
-        language_version: python3.10
 
     # Automatically sort the imports used in .py files
   - repo: https://github.com/pycqa/isort
     rev: 5.12.0
     hooks:
       - id: isort
-        name: Run isort (python files)
-        description: Sort and organize imports in .py files.
-        types: [python]
-        files: ^(src|tests|benchmarks)/
+        name: Run isort
+        description: Sort and organize imports in .py and .pyi files.
+        types_or: [python, pyi]
 
-    # Automatically sort the imports used in .ipynb files
-  - repo: https://github.com/nbQA-dev/nbQA
-    rev: 1.7.0
-    hooks:
-      - id: nbqa-isort
-        name: Run isort (jupyter notebooks)
-        files: ^docs/
-        args: ["--float-to-top"]
+
 
     # Analyze the src code style and report code that doesn't adhere.
   - repo: local
@@ -106,11 +90,11 @@ repos:
   - repo: local
     hooks:
       - id: pylint
-        name: pylint (python files in tests/)
+        name: pylint (python files in tests/ and benchmarks/)
         entry: pylint
         language: system
         types: [python]
-        files: ^tests/
+        files: ^(tests|benchmarks)/
         args:
           [
             "-rn", # Only display messages
