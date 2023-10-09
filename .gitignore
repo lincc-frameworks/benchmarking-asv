@@ -148,3 +148,4 @@ benchmarks/html
 # Airspeed Velocity performance results
 _results/
 _html/
+.idea/

@@ -1,13 +1,12 @@
-import random
-import time
-
 import benchmarking_asv as bench
 
 
-class TimeSuite:
-
+class TimeSuite: # pylint: disable=too-few-public-methods
     """An example benchmark that times the performance of various kinds
     of iterating over dictionaries in Python."""
+
+    def __init__(self):
+        self.d = {}
 
     def setup(self):
         self.d = {}
@@ -15,18 +14,24 @@ class TimeSuite:
             self.d[x] = None
 
     def time_keys(self):
+        """Time first method."""
         bench.example_module.run_time_computation()
 
     def time_iterkeys(self):
+        """Time second method."""
         bench.example_module.run_time_computation()
 
     def time_range(self):
+        """Time third method."""
         bench.example_module.run_time_computation()
 
     def time_xrange(self):
+        """Time fourth method."""
         bench.example_module.run_time_computation()
 
 
-class MemSuite:
+class MemSuite: # pylint: disable=too-few-public-methods
+    """An example benchmark that times memory consumption."""
+
     def mem_list(self):
         return bench.example_module.run_mem_computation()
