@@ -1,16 +1,37 @@
-"""Two sample benchmarks to compute runtime and memory usage.
-
-For more information on writing benchmarks:
-https://asv.readthedocs.io/en/stable/writing_benchmarks.html."""
-
-import example_benchmarks
+import benchmarking_asv as bench
 
 
-def time_computation():
-    """Time computations are prefixed with 'time'."""
-    example_benchmarks.runtime_computation()
+class TimeSuite: # pylint: disable=too-few-public-methods
+    """An example benchmark that times the performance of various kinds
+    of iterating over dictionaries in Python."""
+
+    def __init__(self):
+        self.d = {}
+
+    def setup(self):
+        self.d = {}
+        for x in range(500):
+            self.d[x] = None
+
+    def time_keys(self):
+        """Time first method."""
+        bench.example_module.run_time_computation()
+
+    def time_iterkeys(self):
+        """Time second method."""
+        bench.example_module.run_time_computation()
+
+    def time_range(self):
+        """Time third method."""
+        bench.example_module.run_time_computation()
+
+    def time_xrange(self):
+        """Time fourth method."""
+        bench.example_module.run_time_computation()
 
 
-def mem_list():
-    """Memory computations are prefixed with 'mem' or 'peakmem'."""
-    return example_benchmarks.memory_computation()
+class MemSuite: # pylint: disable=too-few-public-methods
+    """An example benchmark that times memory consumption."""
+
+    def mem_list(self):
+        return bench.example_module.run_mem_computation()
