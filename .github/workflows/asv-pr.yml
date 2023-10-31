@@ -1,6 +1,6 @@
 # This workflow will run benchmarks with airspeed velocity (asv) for pull requests.
 # It will compare the performance of the main branch with the performance of the merge
-# with the new changes and publish a comment with this assessment.  
+# with the new changes and publish a comment with this assessment.
 
 name: Run ASV benchmarks for PR
 
@@ -80,7 +80,7 @@ jobs:
           git fetch upstream
           asv continuous upstream/main HEAD --verbose || true
           asv compare upstream/main HEAD --sort ratio --verbose | tee output
-          python -m lf_asv_formatter
+          python -m lf_asv_formatter --asv_version "$(echo asv --version)"
           printf "\n\nClick [here]($STEP_URL) to view all benchmarks." >> output
         env:
           STEP_URL: "${{ steps.jobs.outputs.html_url }}#step:8:1"
