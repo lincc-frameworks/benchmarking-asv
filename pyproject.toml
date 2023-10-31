@@ -35,7 +35,7 @@ dev = [
     "ipython", # Also used in building notebooks into Sphinx
     "matplotlib", # Used in sample notebook intro_notebook.ipynb
     "numpy", # Used in sample notebook intro_notebook.ipynb
-    "asv==0.5.1", # Used to compute performance benchmarks
+    "asv", # Used to compute performance benchmarks
 ]
 
 [build-system]
