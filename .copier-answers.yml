@@ -1,5 +1,5 @@
 # Changes here will be overwritten by Copier
-_commit: v1.4.3
+_commit: v1.4.4
 _src_path: gh:lincc-frameworks/python-project-template
 author_email: scampos@andrew.cmu.edu
 author_name: Sandro Campos
@@ -7,3 +7,4 @@ custom_install: false
 package_name: benchmarking_asv
 project_license: none
 project_name: benchmarking-asv
+project_organization: lincc-frameworks
