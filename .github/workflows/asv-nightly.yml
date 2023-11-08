@@ -49,6 +49,15 @@ jobs:
       - name: Create ASV machine config file
         run: asv machine --machine gh-runner --yes
 
+      - name: Fetch previous results from the "benchmarks" branch
+        run: |
+          if git ls-remote --exit-code origin benchmarks > /dev/null 2>&1; then
+            git merge origin/benchmarks \
+              --allow-unrelated-histories \
+              --no-commit
+            mv ../_results .
+          fi
+
       - name: Get nightly dates under comparison
         id: nightly-dates
         run: |
