@@ -1,0 +1,38 @@
+# This workflow will run benchmarks with airspeed velocity (asv), 
+# store the new results in the "benchmarks" branch and publish them
+# to a dashboard on GH Pages.
+
+name: Run ASV benchmarks for main
+
+jobs:
+  asv-main:
+    extends:
+      template: .github/workflows/asv/asv-template.yml
+    permissions:
+      contents: write
+    steps:
+      - name: Fetch previous results from the "benchmarks" branch
+        run: |
+          if git ls-remote --exit-code origin benchmarks > /dev/null 2>&1; then
+            git merge origin/benchmarks \
+              --allow-unrelated-histories \
+              --no-commit
+            mv ../_results .
+          fi
+      - name: Run ASV for the main branch
+        run: asv run ALL --skip-existing --verbose || true
+      - name: Submit new results to the "benchmarks" branch
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: benchmarks
+          folder: ${{ env.WORKING_DIR }}/_results
+          target-folder: _results
+      - name: Generate dashboard HTML
+        run: |
+          asv show
+          asv publish
+      - name: Deploy to Github pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: ${{ env.WORKING_DIR }}/_html
