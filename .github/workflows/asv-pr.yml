@@ -74,7 +74,7 @@ jobs:
           OUTPUT_FILE: ${{ env.ARTIFACTS_DIR }}/output
           STEP_URL: "${{ steps.jobs.outputs.html_url }}#step:8:1"
       - name: Save pull request number
-        run: echo ${{ github.event.pull_request.number }} > ${{ ARTIFACTS_DIR }}/pr
+        run: echo ${{ github.event.pull_request.number }} > ${{ env.ARTIFACTS_DIR }}/pr
       - name: Upload artifacts (pr-number and benchmarks output)
         uses: actions/upload-artifact@v3
         with:
