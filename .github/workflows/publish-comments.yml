@@ -1,0 +1,63 @@
+# This workflow publishes a benchmarks comment to a PR.
+# It is triggered after the benchmarks are computed in the asv-pr workflow.
+# This separation of concerns allows us limit access to the target repository
+# private tokens and secrets, increasing the level of security.
+name: Publish benchmarks comment to PR
+
+on:
+  workflow_run:
+    workflows: ["Run benchmarks for PR"]
+    types: [completed]
+
+env:
+  ARTIFACTS_DIR: ${{ github.workspace }}/artifacts
+
+concurrency:
+   group: ${{ github.workflow }}-${{ github.ref }}
+   cancel-in-progress: true
+
+jobs:
+  upload-comment:
+    runs-on: ubuntu-latest
+    if: >
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.conclusion == 'success'
+    steps:
+    - name: Workflow run_id
+      run: echo ${{ github.event.workflow_run.id }}
+    - name: Download artifact
+      uses: actions/github-script@v6
+      with:
+        script: |
+          let allArtifacts = await github.rest.actions.listWorkflowRunArtifacts({
+             owner: context.repo.owner,
+             repo: context.repo.repo,
+             run_id: context.payload.workflow_run.id,
+          });
+          let matchArtifact = allArtifacts.data.artifacts.filter((artifact) => {
+            return artifact.name == "benchmarks"
+          })[0];
+          let download = await github.rest.actions.downloadArtifact({
+             owner: context.repo.owner,
+             repo: context.repo.repo,
+             artifact_id: matchArtifact.id,
+             archive_format: 'zip',
+          });
+          let fs = require('fs');
+          fs.writeFileSync(`${{github.workspace}}/benchmarks.zip`, Buffer.from(download.data));
+    - name: Unzip artifacts
+      run: unzip benchmarks.zip
+    - name: Find benchmarks comment
+      uses: peter-evans/find-comment@v2
+      id: find-comment
+      with:
+        issue-number: $(cat ${{ env.ARTIFACTS_DIR }}/pr)
+        comment-author: 'github-actions[bot]'
+        body-includes: view all benchmarks
+    - name: Create or update benchmarks comment
+      uses: peter-evans/create-or-update-comment@v3
+      with:
+        comment-id: ${{ steps.find-comment.outputs.comment-id }}
+        issue-number: $(cat ${{ env.ARTIFACTS_DIR }}/pr)
+        body-path: $(cat ${{ env.ARTIFACTS_DIR }}/output)
+        edit-mode: replace
