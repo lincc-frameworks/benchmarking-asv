@@ -9,9 +9,6 @@ on:
     workflows: ["Run benchmarks for PR"]
     types: [completed]
 
-env:
-  ARTIFACTS_DIR: ${{ github.workspace }}/artifacts
-
 concurrency:
    group: ${{ github.workflow }}-${{ github.ref }}
    cancel-in-progress: true
@@ -37,7 +34,7 @@ jobs:
              run_id: context.payload.workflow_run.id,
           });
           let matchArtifact = allArtifacts.data.artifacts.filter((artifact) => {
-            return artifact.name == "benchmarks"
+            return artifact.name == "artifacts"
           })[0];
           let download = await github.rest.actions.downloadArtifact({
              owner: context.repo.owner,
@@ -46,20 +43,24 @@ jobs:
              archive_format: 'zip',
           });
           let fs = require('fs');
-          fs.writeFileSync(`${{github.workspace}}/benchmarks.zip`, Buffer.from(download.data));
-    - name: Unzip artifacts
-      run: unzip benchmarks.zip
+          fs.writeFileSync(`${{github.workspace}}/artifacts.zip`, Buffer.from(download.data));
+    - name: Unzip artifacts and extract information
+      id: pr-info
+      run: |
+        unzip artifacts.zip
+        echo "pr=$(cat pr)" >> $GITHUB_OUTPUT
+        echo "output=$(cat output)" >> $GITHUB_OUTPUT
     - name: Find benchmarks comment
       uses: peter-evans/find-comment@v2
       id: find-comment
       with:
-        issue-number: $(cat ${{ env.ARTIFACTS_DIR }}/pr)
+        issue-number: ${{ steps.pr-info.outputs.pr }}
         comment-author: 'github-actions[bot]'
         body-includes: view all benchmarks
     - name: Create or update benchmarks comment
       uses: peter-evans/create-or-update-comment@v3
       with:
         comment-id: ${{ steps.find-comment.outputs.comment-id }}
-        issue-number: $(cat ${{ env.ARTIFACTS_DIR }}/pr)
-        body-path: $(cat ${{ env.ARTIFACTS_DIR }}/output)
+        issue-number: ${{ steps.pr-info.outputs.pr }}
+        body-path: ${{ steps.pr-info.outputs.output }}
         edit-mode: replace
