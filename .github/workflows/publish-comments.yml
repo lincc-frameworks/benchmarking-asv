@@ -28,7 +28,6 @@ jobs:
         echo "Head Branch: ${{ github.event.workflow_run.head_branch }}"
         echo "Conclusion: ${{ github.event.workflow_run.conclusion }}"
         echo "Event: ${{ github.event.workflow_run.event }}"
-        echo "
     - name: Download artifact
       uses: actions/download-artifact@v3
       with:
