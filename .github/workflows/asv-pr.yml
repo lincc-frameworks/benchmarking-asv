@@ -8,14 +8,15 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   PYTHON_VERSION: "3.10"
   WORKING_DIR: ${{ github.workspace }}/benchmarks
   ARTIFACTS_DIR: ${{ github.workspace }}/artifacts
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
 
 jobs:
   setup-python:
@@ -78,5 +79,5 @@ jobs:
       - name: Upload artifacts (pr-number and benchmarks output)
         uses: actions/upload-artifact@v3
         with:
-          name: artifacts
+          name: artifacts-${{ github.run_id }}
           path: ${{ env.ARTIFACTS_DIR }}

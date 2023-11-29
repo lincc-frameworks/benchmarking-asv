@@ -20,30 +20,19 @@ jobs:
       github.event.workflow_run.event == 'pull_request' &&
       github.event.workflow_run.conclusion == 'success'
     steps:
-    - name: Workflow info
+    - name: Display Workflow Run Information
       run: |
-        echo ${{ github.event.workflow_run.id }}
         echo ${{ github.event.workflow_run }}
+        echo "Workflow Run ID: ${{ github.event.workflow_run.id }}"
+        echo "Head SHA: ${{ github.event.workflow_run.head_sha }}"
+        echo "Head Branch: ${{ github.event.workflow_run.head_branch }}"
+        echo "Conclusion: ${{ github.event.workflow_run.conclusion }}"
+        echo "Event: ${{ github.event.workflow_run.event }}"
+        echo "
     - name: Download artifact
-      uses: actions/github-script@v6
+      uses: actions/download-artifact@v3
       with:
-        script: |
-          let allArtifacts = await github.rest.actions.listWorkflowRunArtifacts({
-             owner: context.repo.owner,
-             repo: context.repo.repo,
-             run_id: context.payload.workflow_run.id,
-          });
-          let matchArtifact = allArtifacts.data.artifacts.filter((artifact) => {
-            return artifact.name == "artifacts"
-          })[0];
-          let download = await github.rest.actions.downloadArtifact({
-             owner: context.repo.owner,
-             repo: context.repo.repo,
-             artifact_id: matchArtifact.id,
-             archive_format: 'zip',
-          });
-          let fs = require('fs');
-          fs.writeFileSync(`${{github.workspace}}/artifacts.zip`, Buffer.from(download.data));
+        name: artifacts-${{ github.event.workflow_run.id }}
     - name: Unzip artifacts and extract information
       id: pr-info
       run: |
