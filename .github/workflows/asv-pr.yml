@@ -17,7 +17,6 @@ env:
   WORKING_DIR: ${{ github.workspace }}/benchmarks
   ARTIFACTS_DIR: ${{ github.workspace }}/artifacts
 
-
 jobs:
   setup-python:
     runs-on: ubuntu-latest
@@ -79,5 +78,5 @@ jobs:
       - name: Upload artifacts (PR number and benchmarks output)
         uses: actions/upload-artifact@v3
         with:
-          name: artifacts-${{ github.run_id }}
+          name: artifacts
           path: ${{ env.ARTIFACTS_DIR }}
