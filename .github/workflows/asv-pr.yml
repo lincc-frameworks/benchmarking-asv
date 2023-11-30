@@ -78,5 +78,5 @@ jobs:
       - name: Upload artifacts (PR number and benchmarks output)
         uses: actions/upload-artifact@v3
         with:
-          name: artifacts
+          name: benchmark-artifacts
           path: ${{ env.ARTIFACTS_DIR }}
