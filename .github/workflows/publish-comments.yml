@@ -31,9 +31,9 @@ jobs:
     - name: Extract artifacts information
       id: pr-info
       run: |
-        echo "PR number: $(cat pr)"
-        echo "Output:\n $(cat output)"
-        echo "pr=$(cat pr)" >> $GITHUB_OUTPUT
+        printf "PR number: $(cat pr)"
+        printf "Output:\n $(cat output)"
+        printf "pr=$(cat pr)" >> $GITHUB_OUTPUT
     - name: Find benchmarks comment
       uses: peter-evans/find-comment@v2
       id: find-comment
