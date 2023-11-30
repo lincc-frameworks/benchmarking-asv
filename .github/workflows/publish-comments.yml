@@ -31,12 +31,9 @@ jobs:
     - name: Extract artifacts information
       id: pr-info
       run: |
-        pr_number=$(cat pr)
-        echo "PR number: $pr_number"
-        output_content=$(cat output)
-        echo "Output: $output_content"
-        echo "pr=$pr_number" >> $GITHUB_OUTPUT
-        echo "output=$output_content" >> $GITHUB_OUTPUT
+        echo "PR number: $(cat pr)"
+        echo "Output:\n $(cat output)"
+        echo "pr=$(cat pr)" >> $GITHUB_OUTPUT
     - name: Find benchmarks comment
       uses: peter-evans/find-comment@v2
       id: find-comment
@@ -49,5 +46,5 @@ jobs:
       with:
         comment-id: ${{ steps.find-comment.outputs.comment-id }}
         issue-number: ${{ steps.pr-info.outputs.pr }}
-        body-path: ${{ steps.pr-info.outputs.output }}
+        body-path: output
         edit-mode: replace
