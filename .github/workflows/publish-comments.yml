@@ -28,11 +28,10 @@ jobs:
       with:
         name: benchmark-artifacts
         run_id: ${{ github.event.workflow_run.id }}
-        allow_forks: true
     - name: Unzip artifacts and extract information
       id: pr-info
       run: |
-        mv benchmark-artifacts
+        cd benchmark-artifacts
         echo "pr=$(cat pr)" >> $GITHUB_OUTPUT
         echo "output=$(cat output)" >> $GITHUB_OUTPUT
     - name: Find benchmarks comment
