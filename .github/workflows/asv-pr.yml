@@ -37,6 +37,9 @@ jobs:
       run:
         working-directory: ${{ env.WORKING_DIR }}
     steps:
+    - name: Display Workflow Run Information
+      run: |
+        echo "Workflow Run ID: ${{ github.run_id }}"
     - name: Checkout PR branch of the repository
       uses: actions/checkout@v3
       with:
