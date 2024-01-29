@@ -17,6 +17,9 @@ dependencies = [
     "ipykernel", # Support for Jupyter notebooks
 ]
 
+[project.urls]
+"Source Code" = "https://github.com/lincc-frameworks/benchmarking-asv"
+
 # On a mac, install optional dependencies with `pip install '.[dev]'` (include the single quotes)
 [project.optional-dependencies]
 dev = [
@@ -33,14 +36,8 @@ dev = [
     "nbconvert", # Needed for pre-commit check to clear output from Python notebooks
     "nbsphinx", # Used to integrate Python notebooks into Sphinx documentation
     "ipython", # Also used in building notebooks into Sphinx
-    "matplotlib", # Used in sample notebook intro_notebook.ipynb
-    "numpy", # Used in sample notebook intro_notebook.ipynb
     "asv==0.6.1", # Used to compute performance benchmarks
 ]
-
-[metadata]
-long_description = { file = "README.md" }
-url = "https://github.com/lincc-frameworks/benchmarking-asv"
 
 [build-system]
 requires = [
@@ -56,6 +53,14 @@ write_to = "src/benchmarking_asv/_version.py"
 testpaths = [
     "tests",
 ]
+
+[tool.black]
+line-length = 110
+target-version = ["py38"]
+
+[tool.isort]
+profile = "black"
+line_length = 110
 
 [tool.coverage.run]
 omit=["src/benchmarking_asv/_version.py"]
