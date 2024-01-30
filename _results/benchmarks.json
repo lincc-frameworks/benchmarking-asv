@@ -1,15 +1,15 @@
 {
     "benchmarks.MemSuite.mem_list": {
-        "code": "class MemSuite:\n    def mem_list(self):\n        return bench.example_module.run_mem_computation()",
+        "code": "class MemSuite:\n    def mem_list(self):\n        return example_module.run_mem_computation()",
         "name": "benchmarks.MemSuite.mem_list",
         "param_names": [],
         "params": [],
         "type": "memory",
         "unit": "bytes",
-        "version": "1e6d6124b3320c2e93916f9ec1416c80e4c1533127d61997a1eae4d40e716fce"
+        "version": "197423b6937cbb54300ed6eced07897116834ec71c7c479619eb06f37feed490"
     },
     "benchmarks.TimeSuite.time_iterkeys": {
-        "code": "class TimeSuite:\n    def time_iterkeys(self):\n        \"\"\"Time second method.\"\"\"\n        bench.example_module.run_time_computation()\n\n    def setup(self):\n        self.d = {}\n        for x in range(500):\n            self.d[x] = None",
+        "code": "class TimeSuite:\n    def time_iterkeys(self):\n        \"\"\"Time second method.\"\"\"\n        example_module.run_time_computation()\n\n    def setup(self):\n        self.d = {}\n        for x in range(500):\n            self.d[x] = None",
         "min_run_count": 2,
         "name": "benchmarks.TimeSuite.time_iterkeys",
         "number": 0,
@@ -20,11 +20,11 @@
         "sample_time": 0.01,
         "type": "time",
         "unit": "seconds",
-        "version": "b62205aee558290cd5d6022ac1f1436866983bde8adbb9e32bf461869918cebd",
+        "version": "77bdf4bf567b535a113b08c4e01c609553171280b25274ea6716c814eed8b61e",
         "warmup_time": -1
     },
     "benchmarks.TimeSuite.time_keys": {
-        "code": "class TimeSuite:\n    def time_keys(self):\n        \"\"\"Time first method.\"\"\"\n        bench.example_module.run_time_computation()\n\n    def setup(self):\n        self.d = {}\n        for x in range(500):\n            self.d[x] = None",
+        "code": "class TimeSuite:\n    def time_keys(self):\n        \"\"\"Time first method.\"\"\"\n        example_module.run_time_computation()\n\n    def setup(self):\n        self.d = {}\n        for x in range(500):\n            self.d[x] = None",
         "min_run_count": 2,
         "name": "benchmarks.TimeSuite.time_keys",
         "number": 0,
@@ -35,11 +35,11 @@
         "sample_time": 0.01,
         "type": "time",
         "unit": "seconds",
-        "version": "e85b889209c1692d28771bee8154b8c571340e3a957342195ead4fdf216a14a8",
+        "version": "caf9e8c84b8242b6e54986e0b5f1216a3c81ece6a2a154762560051c8e3f4f67",
         "warmup_time": -1
     },
     "benchmarks.TimeSuite.time_range": {
-        "code": "class TimeSuite:\n    def time_range(self):\n        \"\"\"Time third method.\"\"\"\n        bench.example_module.run_time_computation()\n\n    def setup(self):\n        self.d = {}\n        for x in range(500):\n            self.d[x] = None",
+        "code": "class TimeSuite:\n    def time_range(self):\n        \"\"\"Time third method.\"\"\"\n        example_module.run_time_computation()\n\n    def setup(self):\n        self.d = {}\n        for x in range(500):\n            self.d[x] = None",
         "min_run_count": 2,
         "name": "benchmarks.TimeSuite.time_range",
         "number": 0,
@@ -50,11 +50,11 @@
         "sample_time": 0.01,
         "type": "time",
         "unit": "seconds",
-        "version": "36aff0e476de9ba289ed515ef8cbbb9f35ed68ee8c9f10777f73659295b30b78",
+        "version": "60732320d2c0828edacf1641eabbcbaf415f1307fca3c7093962ae9e909fd8e0",
         "warmup_time": -1
     },
     "benchmarks.TimeSuite.time_xrange": {
-        "code": "class TimeSuite:\n    def time_xrange(self):\n        \"\"\"Time fourth method.\"\"\"\n        bench.example_module.run_time_computation()\n\n    def setup(self):\n        self.d = {}\n        for x in range(500):\n            self.d[x] = None",
+        "code": "class TimeSuite:\n    def time_xrange(self):\n        \"\"\"Time fourth method.\"\"\"\n        example_module.run_time_computation()\n\n    def setup(self):\n        self.d = {}\n        for x in range(500):\n            self.d[x] = None",
         "min_run_count": 2,
         "name": "benchmarks.TimeSuite.time_xrange",
         "number": 0,
@@ -65,7 +65,7 @@
         "sample_time": 0.01,
         "type": "time",
         "unit": "seconds",
-        "version": "fbc6effd617aea80cc01b167716bc3cb6eaec4ce2e87ff02c7fadfe332b41462",
+        "version": "5f2df7dbf3d6ad4663a479a48abb2029883695fb795c18399a83fc9ca9eec188",
         "warmup_time": -1
     },
     "version": 2
