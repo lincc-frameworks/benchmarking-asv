@@ -33,7 +33,8 @@ jobs:
         pip install .
         pip install .[dev]
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-    - name: Analyze code with ruff
+    - name: Analyze code with pylint
       run: |
-       ruff format --check
-       ruff check
+        pylint -rn -sn --recursive=y ./src --rcfile=./src/.pylintrc
+        pylint -rn -sn --recursive=y ./tests --rcfile=./tests/.pylintrc
+        pylint -rn -sn --recursive=y ./benchmarks --rcfile=./tests/.pylintrc

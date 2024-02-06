@@ -29,7 +29,7 @@ dev = [
     "sphinx", # Used to automatically generate documentation
     "sphinx-rtd-theme", # Used to render documentation
     "sphinx-autoapi", # Used to automatically generate api documentation
-    "ruff", # Used for static linting of files
+    "pylint", # Used for static linting of files
     # if you add dependencies here while experimenting in a notebook and you
     # want that notebook to render in your documentation, please add the
     # dependencies to ./docs/requirements.txt as well.
