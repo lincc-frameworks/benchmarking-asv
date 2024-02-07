@@ -22,7 +22,6 @@ env:
 jobs:
   asv-pr:
     runs-on: ubuntu-latest
-    needs: setup-python
     defaults:
       run:
         working-directory: ${{ env.WORKING_DIR }}
