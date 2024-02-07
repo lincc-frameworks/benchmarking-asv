@@ -33,27 +33,15 @@ jobs:
           sudo apt-get update
           python -m pip install --upgrade pip
           pip install asv==0.6.1 virtualenv
-      - name: Configure git
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
       - name: Create ASV machine config file
         run: asv machine --machine gh-runner --yes
-      - name: Fetch previous results from the "benchmarks" branch
-        run: |
-          if git ls-remote --exit-code origin benchmarks > /dev/null 2>&1; then
-            git merge origin/benchmarks \
-              --allow-unrelated-histories \
-              --no-commit
-            mv ../_results .
-          fi
       - name: Get nightly dates under comparison
         id: nightly-dates
         run: |
           echo "yesterday=$(date -d yesterday +'%Y-%m-%d')" >> $GITHUB_OUTPUT
           echo "today=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
       - name: Use last nightly commit hash from cache
-        uses: actions/cache@main
+        uses: actions/cache/restore@main
         with:
           path: ${{ env.WORKING_DIR }}
           key: nightly-results-${{ steps.nightly-dates.outputs.yesterday }}
@@ -68,7 +56,7 @@ jobs:
           fi
           echo $CURRENT_HASH > $HASH_FILE
       - name: Update last nightly hash in cache
-        uses: actions/cache@main
+        uses: actions/cache/save@main
         with:
           path: ${{ env.WORKING_DIR }}
           key: nightly-results-${{ steps.nightly-dates.outputs.today }}
