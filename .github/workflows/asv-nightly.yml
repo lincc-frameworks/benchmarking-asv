@@ -4,6 +4,8 @@
 name: Run benchmarks nightly job
 
 on:
+  pull_request:
+    branches: [ main ]
   schedule:
     - cron: 45 6 * * *
   workflow_dispatch:
@@ -24,11 +26,6 @@ jobs:
         uses: actions/checkout@main
         with:
           fetch-depth: 0
-      - name: Cache Python ${{ env.PYTHON_VERSION }}
-        uses: actions/cache@main
-        with:
-          path: ~/.cache/pip
-          key: python-${{ env.PYTHON_VERSION }}
       - name: Set up Python ${{ env.PYTHON_VERSION }}
         uses: actions/setup-python@main
         with:

@@ -30,23 +30,18 @@ jobs:
       uses: actions/checkout@main
       with:
         fetch-depth: 0
-    - name: Cache Python ${{ env.PYTHON_VERSION }}
-      uses: actions/cache@main
-      with:
-        path: ~/.cache/pip
-        key: python-${{ env.PYTHON_VERSION }}
     - name: Set up Python ${{ env.PYTHON_VERSION }}
       uses: actions/setup-python@main
       with:
         python-version: ${{ env.PYTHON_VERSION }}
-    - name: Display Workflow Run Information
-      run: |
-        echo "Workflow Run ID: ${{ github.run_id }}"
     - name: Install dependencies
       run: |
         sudo apt-get update
         python -m pip install --upgrade pip
-        pip install asv==0.6.1 virtualenv tabulate lf-asv-formatter
+        pip install asv==0.6.1 lf-asv-formatter tabulate virtualenv
+    - name: Display Workflow Run Information
+      run: |
+        echo "Workflow Run ID: ${{ github.run_id }}"
     - name: Make artifacts directory
       run: mkdir -p ${{ env.ARTIFACTS_DIR }}
     - name: Save pull request number
@@ -59,6 +54,14 @@ jobs:
         job_name: ${{ github.job }}
     - name: Create ASV machine config file
       run: asv machine --machine gh-runner --yes
+    - name: Fetch previous results from the "benchmarks" branch
+      run: |
+        if git ls-remote --exit-code origin benchmarks > /dev/null 2>&1; then
+          git merge origin/benchmarks \
+            --allow-unrelated-histories \
+            --no-commit
+          mv ../_results .
+        fi
     - name: Save comparison of PR against main branch
       run: |
         git remote add upstream https://github.com/${{ github.repository }}.git
