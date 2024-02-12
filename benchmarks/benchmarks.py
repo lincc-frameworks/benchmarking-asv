@@ -1,5 +1,3 @@
-import sys
-
 from benchmarking_asv import example_module
 
 
@@ -14,10 +12,6 @@ class TimeSuite:  # pylint: disable=too-few-public-methods
         self.d = {}
         for x in range(500):
             self.d[x] = None
-
-
-
-
 
     def time_keys(self):
         """Time first method."""

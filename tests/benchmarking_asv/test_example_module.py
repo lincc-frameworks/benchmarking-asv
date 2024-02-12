@@ -1,7 +1,5 @@
 """An example module containing testing of mock functions."""
 
-import pytest
-
 from benchmarking_asv import example_module
 
 

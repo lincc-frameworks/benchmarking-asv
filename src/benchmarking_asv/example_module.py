@@ -1,15 +1,18 @@
 """An example module containing simplistic functions."""
 
-import os
 import random
 import time
 
 
 def greetings() -> str:
+    """A friendly greeting for a future friend.
+
+    Returns
+    -------
+    str
+        A typical greeting from a software engineer.
+    """
     return "Hello from LINCC-Frameworks!"
-
-
-
 
 
 def meaning() -> int:
