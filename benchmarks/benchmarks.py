@@ -1,5 +1,7 @@
-from benchmarking_asv import example_module
 import sys
+
+from benchmarking_asv import example_module
+
 
 class TimeSuite:  # pylint: disable=too-few-public-methods
     """An example benchmark that times the performance of various kinds

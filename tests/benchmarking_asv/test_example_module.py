@@ -1,8 +1,8 @@
 """An example module containing testing of mock functions."""
 
-from benchmarking_asv import example_module
-
 import pytest
+
+from benchmarking_asv import example_module
 
 
 def test_greetings() -> None:
