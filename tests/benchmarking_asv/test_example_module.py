@@ -2,6 +2,8 @@
 
 from benchmarking_asv import example_module
 
+import pytest
+
 
 def test_greetings() -> None:
     """Verify the output of the `greetings` function"""

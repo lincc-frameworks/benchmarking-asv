@@ -1,5 +1,5 @@
 from benchmarking_asv import example_module
-
+import sys
 
 class TimeSuite:  # pylint: disable=too-few-public-methods
     """An example benchmark that times the performance of various kinds
@@ -12,6 +12,10 @@ class TimeSuite:  # pylint: disable=too-few-public-methods
         self.d = {}
         for x in range(500):
             self.d[x] = None
+
+
+
+
 
     def time_keys(self):
         """Time first method."""

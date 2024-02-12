@@ -2,17 +2,14 @@
 
 import random
 import time
+import os
 
 
 def greetings() -> str:
-    """A friendly greeting for a future friend.
-
-    Returns
-    -------
-    str
-        A typical greeting from a software engineer.
-    """
     return "Hello from LINCC-Frameworks!"
+
+
+
 
 
 def meaning() -> int:
