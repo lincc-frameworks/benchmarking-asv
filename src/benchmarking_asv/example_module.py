@@ -1,7 +1,7 @@
 """An example module containing simplistic functions."""
 
-import time
 import random
+import time
 
 
 def greetings() -> str:
