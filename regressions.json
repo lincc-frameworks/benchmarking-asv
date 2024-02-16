@@ -1,1 +1,1 @@
-{"regressions": [["benchmarks.TimeSuite.time_iterkeys", "graphs/Cython/branch-HEAD/build/machine-gh-runner/packaging/python-3.10/benchmarks.TimeSuite.time_iterkeys.json", {}, null, 2.578885594499752, 1.4309534335002354, [[null, 114, 1.4309534335002354, 2.578885594499752]]]]}
+{"regressions": [["benchmarks.TimeSuite.time_keys", "graphs/Cython/branch-HEAD/build/machine-gh-runner/packaging/python-3.10/benchmarks.TimeSuite.time_keys.json", {}, null, 2.410808066999948, 1.2657636624999213, [[null, 114, 1.2657636624999213, 2.410808066999948]]]]}
