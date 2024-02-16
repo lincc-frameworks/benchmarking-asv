@@ -42,7 +42,6 @@ repos:
         name: Validate pyproject.toml
         description: Verify that pyproject.toml adheres to the established schema.
 
-
     # Automatically sort the imports used in .py files
   - repo: https://github.com/pycqa/isort
     rev: 5.12.0
@@ -51,8 +50,6 @@ repos:
         name: Run isort
         description: Sort and organize imports in .py and .pyi files.
         types_or: [python, pyi]
-
-
 
     # Analyze the src code style and report code that doesn't adhere.
   - repo: local
