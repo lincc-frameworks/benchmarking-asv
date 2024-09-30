@@ -15,7 +15,6 @@ classifiers = [
 dynamic = ["version"]
 requires-python = ">=3.9"
 dependencies = [
-    "ipykernel", # Support for Jupyter notebooks
 ]
 
 [project.urls]
@@ -24,20 +23,12 @@ dependencies = [
 # On a mac, install optional dependencies with `pip install '.[dev]'` (include the single quotes)
 [project.optional-dependencies]
 dev = [
+    "asv==0.6.1", # Used to compute performance benchmarks
+    "jupyter", # Clears output from Jupyter notebooks
+    "pre-commit", # Used to run checks before finalizing a git commit
+    "pylint", # Used for static linting of files
     "pytest",
     "pytest-cov", # Used to report total code coverage
-    "pre-commit", # Used to run checks before finalizing a git commit
-    "sphinx", # Used to automatically generate documentation
-    "sphinx-rtd-theme", # Used to render documentation
-    "sphinx-autoapi", # Used to automatically generate api documentation
-    "pylint", # Used for static linting of files
-    # if you add dependencies here while experimenting in a notebook and you
-    # want that notebook to render in your documentation, please add the
-    # dependencies to ./docs/requirements.txt as well.
-    "nbconvert", # Needed for pre-commit check to clear output from Python notebooks
-    "nbsphinx", # Used to integrate Python notebooks into Sphinx documentation
-    "ipython", # Also used in building notebooks into Sphinx
-    "asv==0.6.1", # Used to compute performance benchmarks
 ]
 
 [build-system]
@@ -95,7 +86,8 @@ select = [
     "D300",
     "D417",
     "D419",
-
+    # Numpy v2.0 compatibility
+    "NPY201",
 ]
 
 ignore = [
