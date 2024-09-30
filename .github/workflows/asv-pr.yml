@@ -57,7 +57,7 @@ jobs:
         git fetch upstream
         asv continuous upstream/main HEAD --verbose || true
         asv compare upstream/main HEAD --sort ratio --verbose | tee output
-        print ">> asv version is $(asv --version)"
+        printf ">> asv version is $(asv --version)"
         python -m lf_asv_formatter --asv_version "$(asv --version)"
         printf "\n\nClick [here]($STEP_URL) to view all benchmarks." >> output
         mv output ${{ env.ARTIFACTS_DIR }}
