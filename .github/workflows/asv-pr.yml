@@ -38,7 +38,7 @@ jobs:
       run: |
         echo "Workflow Run ID: ${{ github.run_id }}"
     - name: Install dependencies
-      run: pip install asv==0.6.1 virtualenv tabulate lf-asv-formatter
+      run: pip install "asv[virtualenv]" tabulate lf-asv-formatter
     - name: Make artifacts directory
       run: mkdir -p ${{ env.ARTIFACTS_DIR }}
     - name: Save pull request number
@@ -56,6 +56,7 @@ jobs:
         git remote add upstream https://github.com/${{ github.repository }}.git
         git fetch upstream
         asv --version
+        virtualenv --version
         asv continuous upstream/main HEAD --verbose || true
         asv compare upstream/main HEAD --sort ratio --verbose | tee output
         cat output
