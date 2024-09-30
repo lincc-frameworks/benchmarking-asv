@@ -4,6 +4,8 @@
 name: Run benchmarks nightly job
 
 on:
+  pull_request:
+    branches: [ main ]
   schedule:
     - cron: 45 6 * * *
   workflow_dispatch:
@@ -11,7 +13,7 @@ on:
 env:
   PYTHON_VERSION: "3.10"
   ASV_VERSION: "0.6.4"
-  WORKING_DIR: ${{ github.workspace }}/benchmarks
+  WORKING_DIR: ${{github.workspace}}/benchmarks
   NIGHTLY_HASH_FILE: nightly-hash
 
 jobs:
@@ -19,12 +21,12 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ${{ env.WORKING_DIR }}
+        working-directory: ${{env.WORKING_DIR}}
     steps:
-      - name: Set up Python ${{ env.PYTHON_VERSION }}
+      - name: Set up Python ${{env.PYTHON_VERSION}}
         uses: actions/setup-python@v5
         with:
-          python-version: ${{ env.PYTHON_VERSION }}
+          python-version: ${{env.PYTHON_VERSION}}
       - name: Checkout main branch of the repository
         uses: actions/checkout@v4
         with:
@@ -53,13 +55,13 @@ jobs:
       - name: Use last nightly commit hash from cache
         uses: actions/cache@v4
         with:
-          path: ${{ env.WORKING_DIR }}
-          key: nightly-results-${{ steps.nightly-dates.outputs.yesterday }}
+          path: ${{env.WORKING_DIR}}
+          key: nightly-results-${{steps.nightly-dates.outputs.yesterday}}
       - name: Run comparison of main against last nightly build
         run: |
-          HASH_FILE=${{ env.NIGHTLY_HASH_FILE }}
-          CURRENT_HASH=${{ github.sha }}
-          if [ -f $HASH_FILE ]; then          
+          HASH_FILE=${{env.NIGHTLY_HASH_FILE}}
+          CURRENT_HASH=${{github.sha}}
+          if [ -f $HASH_FILE ]; then
             PREV_HASH=$(cat $HASH_FILE)
             asv continuous $PREV_HASH $CURRENT_HASH --verbose || true
             asv compare $PREV_HASH $CURRENT_HASH --sort ratio --verbose
@@ -68,5 +70,5 @@ jobs:
       - name: Update last nightly hash in cache
         uses: actions/cache@v4
         with:
-          path: ${{ env.WORKING_DIR }}
-          key: nightly-results-${{ steps.nightly-dates.outputs.today }}
+          path: ${{env.WORKING_DIR}}
+          key: nightly-results-${{steps.nightly-dates.outputs.today}}
