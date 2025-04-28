@@ -15,7 +15,7 @@ sys.path.insert(0, os.path.abspath("../src/"))
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = "benchmarking-asv"
-copyright = "2023, Sandro Campos"
+copyright = "2024, Sandro Campos"
 author = "Sandro Campos"
 release = version("benchmarking-asv")
 # for example take major/minor
