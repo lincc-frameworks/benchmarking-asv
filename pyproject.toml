@@ -59,7 +59,7 @@ testpaths = [
     "src",
     "docs",
 ]
-addopts = "--doctest-modules --doctest-glob=*.rst"
+addopts = "--import-mode=importlib --doctest-modules --doctest-glob=*.rst"
 
 [tool.black]
 line-length = 110
