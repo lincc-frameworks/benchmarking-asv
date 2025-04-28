@@ -1,3 +1,4 @@
+
 [project]
 name = "benchmarking-asv"
 license = {file = "LICENSE"}
@@ -34,7 +35,7 @@ dependencies = [
 # On a mac, install optional dependencies with `pip install '.[dev]'` (include the single quotes)
 [project.optional-dependencies]
 dev = [
-    "asv==0.6.1", # Used to compute performance benchmarks
+    "asv==0.6.4", # Used to compute performance benchmarks
     "jupyter", # Clears output from Jupyter notebooks
     "pre-commit", # Used to run checks before finalizing a git commit
     "pylint", # Used for static linting of files
@@ -55,7 +56,10 @@ write_to = "src/benchmarking_asv/_version.py"
 [tool.pytest.ini_options]
 testpaths = [
     "tests",
+    "src",
+    "docs",
 ]
+addopts = "--import-mode=importlib --doctest-modules --doctest-glob=*.rst"
 
 [tool.black]
 line-length = 110
